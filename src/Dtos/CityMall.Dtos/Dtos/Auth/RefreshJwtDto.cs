@@ -1,4 +1,4 @@
-﻿namespace CityMall.Dtos.Dtos.Users.Auth;
+﻿namespace CityMall.Dtos.Dtos.Auth;
 public sealed class RefreshJwtDto
 {
     public string RefreshJWT { get; set; }

@@ -44,7 +44,7 @@ public sealed class CacheService : ICacheService
 
         DistributedCacheEntryOptions distributedCacheEntryOptions = new DistributedCacheEntryOptions()
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(30),
+            AbsoluteExpiration = DateTimeOffset.Now.AddHours(1),
         };
         await _distributedCache.SetStringAsync(key, cachedValue, distributedCacheEntryOptions, cancellation);
         CacheKeys.TryAdd(key, false);

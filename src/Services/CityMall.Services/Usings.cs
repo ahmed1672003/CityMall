@@ -6,7 +6,6 @@ global using System.Text;
 
 global using CityMall.Domain.Entities.Identity;
 global using CityMall.Dtos.Dtos.Emails;
-global using CityMall.Dtos.Dtos.Users.Auth;
 global using CityMall.Infrastructure.Settings;
 global using CityMall.Services.Services.Contracts;
 

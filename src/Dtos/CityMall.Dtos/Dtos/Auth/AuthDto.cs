@@ -1,4 +1,4 @@
-﻿namespace CityMall.Dtos.Dtos.Users.Auth;
+﻿namespace CityMall.Dtos.Dtos.Auth;
 public sealed class AuthDto
 {
     public JwtDto JwtDto { get; set; }

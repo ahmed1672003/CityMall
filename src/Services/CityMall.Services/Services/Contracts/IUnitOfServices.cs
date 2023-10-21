@@ -4,4 +4,5 @@ public interface IUnitOfServices
     IAuthService AuthService { get; }
     IEmailService EmailService { get; }
     IFileService FileService { get; }
+    ICacheService CacheService { get; }
 }

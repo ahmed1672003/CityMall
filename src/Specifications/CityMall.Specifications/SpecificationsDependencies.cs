@@ -1,7 +1,4 @@
-﻿using CityMall.Specifications.Contracts;
-using CityMall.Specifications.Specifications;
-
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace CityMall.Specifications;
 public static class SpecificationsDependencies

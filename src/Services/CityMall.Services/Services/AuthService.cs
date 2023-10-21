@@ -1,5 +1,5 @@
-﻿using CityMall.Infrastructure.Repositories.Contracts;
-using CityMall.Services.Services.Contracts;
+﻿using CityMall.Dtos.Dtos.Auth;
+using CityMall.Infrastructure.Repositories.Contracts;
 using CityMall.Specifications.Contracts;
 
 namespace CityMall.Services.Services;

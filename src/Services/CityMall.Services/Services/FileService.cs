@@ -1,6 +1,5 @@
 ﻿using CityMall.Domain.Exceptions.Images;
 using CityMall.Dtos.Dtos.Files;
-using CityMall.Services.Services.Contracts;
 
 namespace CityMall.Services.Services;
 public sealed class FileService : IFileService
@@ -27,7 +26,7 @@ public sealed class FileService : IFileService
 
             string path = $"{_webHostEnvironment.WebRootPath}/{storage}/";
             string extension = Path.GetExtension(file.FileName);
-            string fileName = $"{Guid.NewGuid().ToString().Replace("-", string.Empty)}{extension}";
+            string fileName = $"{(Guid.NewGuid().ToString() + Guid.NewGuid()).ToString().Replace(" - ", string.Empty)}{extension}";
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);

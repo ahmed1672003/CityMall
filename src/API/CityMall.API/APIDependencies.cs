@@ -12,30 +12,50 @@ using Microsoft.AspNetCore.Authentication.Negotiate;
 
 namespace CityMall.API;
 
+/// <summary>
+/// 
+/// </summary>
 public static class APIDependencies
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
+    /// <returns></returns>
     public static IServiceCollection AddAPIDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         // Add services to the container.
-        services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
-        services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-           .AddNegotiate();
-        services.AddAuthorization(options =>
-        {
-            // By default, all incoming requests will be authorized according to the default policy.
-            options.FallbackPolicy = options.DefaultPolicy;
-        });
-
         services
             .AddDomainDependencies()
             .AddInfrastructureDependencies(configuration)
             .AddSpecificationsDependencies()
             .AddDtoDependencies()
             .AddServicesDependencies(configuration)
-            .AddApplicationDependencies();
+            .AddApplicationDependencies()
+            .AddControllers();
+
+        services.AddEndpointsApiExplorer();
+
+        services
+           .AddAuthentication(NegotiateDefaults.AuthenticationScheme)
+           .AddNegotiate();
+
+        services.AddAuthorization(options =>
+        {
+            // By default, all incoming requests will be authorized according to the default policy.
+            options.FallbackPolicy = options.DefaultPolicy;
+        });
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CityMall", options =>
+            {
+                options
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
+        });
 
         services.AddSwaggerGen(options =>
         {
@@ -43,6 +63,9 @@ public static class APIDependencies
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             options.IncludeXmlComments(xmlPath);
+            options.UseInlineDefinitionsForEnums();
+            options.DescribeAllParametersInCamelCase();
+            options.InferSecuritySchemes();
         });
 
         return services;

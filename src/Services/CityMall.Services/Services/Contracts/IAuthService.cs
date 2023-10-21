@@ -1,4 +1,6 @@
-﻿namespace CityMall.Services.Services.Contracts;
+﻿using CityMall.Dtos.Dtos.Auth;
+
+namespace CityMall.Services.Services.Contracts;
 public interface IAuthService
 {
     Func<string, JwtSecurityToken, Task<bool>> IsJWTValid { get; }
