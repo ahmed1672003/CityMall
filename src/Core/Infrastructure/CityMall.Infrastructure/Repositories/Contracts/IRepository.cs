@@ -1,4 +1,4 @@
-﻿using CityMall.Specifications.Specifications.Contracts;
+﻿using CityMall.Specifications.Contracts;
 
 namespace CityMall.Infrastructure.Repositories.Contracts;
 public interface IRepository<TEntity> where TEntity : class

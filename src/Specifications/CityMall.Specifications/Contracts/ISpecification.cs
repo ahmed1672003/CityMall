@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace CityMall.Specifications.Specifications.Contracts;
+namespace CityMall.Specifications.Contracts;
 public interface ISpecification<TEntity> where TEntity : class
 {
     Expression<Func<TEntity, bool>> Criteria { get; }

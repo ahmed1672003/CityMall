@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
-
-using CityMall.Specifications.Specifications.Contracts;
+using CityMall.Specifications.Contracts;
 
 namespace CityMall.Specifications.Specifications;
 public class Specification<TEntity> : ISpecification<TEntity> where TEntity : class

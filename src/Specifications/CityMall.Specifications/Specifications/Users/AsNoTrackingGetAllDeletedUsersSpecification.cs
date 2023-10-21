@@ -1,4 +1,9 @@
 ﻿namespace CityMall.Specifications.Specifications.Users;
-internal class AsNoTrackingGetAllDeletedUsersSpecification
+public sealed class AsNoTrackingGetAllDeletedUsersSpecification : Specification<User>
 {
+    public AsNoTrackingGetAllDeletedUsersSpecification() : base(u => u.IsDeleted)
+    {
+        StopTracking();
+        IgnorQueryFilter();
+    }
 }

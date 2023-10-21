@@ -7,9 +7,17 @@ public sealed class User : IdentityUser<string>, ICreateableTracker, IDeleteable
 {
     [MaxLength(64)]
     public override string Id { get; set; }
+    [MaxLength(255)]
     public override string UserName { get; set; } = null!;
+    [MaxLength(255)]
     public override string NormalizedUserName { get; set; } = null!;
+    [MaxLength(255)]
+    public string FirstName { get; set; } = null!;
+    [MaxLength(255)]
+    public string LastName { get; set; } = null!;
+    [MaxLength(255)]
     public override string Email { get; set; } = null!;
+    [MaxLength(255)]
     public override string NormalizedEmail { get; set; } = null!;
     public override bool EmailConfirmed { get; set; }
     public string EmailConfirmationToken { get; set; } = null!;

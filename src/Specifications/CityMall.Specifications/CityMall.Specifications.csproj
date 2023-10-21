@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\Core\Domain\CityMall.Domain\CityMall.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Specifications\Jwts\" />
+  </ItemGroup>
+
 </Project>

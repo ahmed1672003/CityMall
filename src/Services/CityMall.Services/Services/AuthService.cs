@@ -1,6 +1,6 @@
 ﻿using CityMall.Infrastructure.Repositories.Contracts;
 using CityMall.Services.Services.Contracts;
-using CityMall.Specifications.Specifications.Contracts;
+using CityMall.Specifications.Contracts;
 
 namespace CityMall.Services.Services;
 public sealed class AuthService : IAuthService

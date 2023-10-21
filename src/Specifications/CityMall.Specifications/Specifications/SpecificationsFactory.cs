@@ -1,4 +1,4 @@
-﻿using CityMall.Specifications.Specifications.Contracts;
+﻿using CityMall.Specifications.Contracts;
 
 namespace CityMall.Specifications.Specifications;
 

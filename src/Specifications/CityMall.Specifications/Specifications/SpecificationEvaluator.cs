@@ -1,5 +1,4 @@
-﻿using CityMall.Specifications.Specifications.Contracts;
-
+﻿using CityMall.Specifications.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace CityMall.Specifications.Specifications;

@@ -1,5 +1,5 @@
-﻿using CityMall.Specifications.Specifications;
-using CityMall.Specifications.Specifications.Contracts;
+﻿using CityMall.Specifications.Contracts;
+using CityMall.Specifications.Specifications;
 
 namespace CityMall.Infrastructure.Repositories;
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : class

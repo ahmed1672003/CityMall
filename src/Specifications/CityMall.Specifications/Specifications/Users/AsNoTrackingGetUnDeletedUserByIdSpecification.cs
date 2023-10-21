@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CityMall.Specifications.Specifications.Users;
-internal class AsNoTrackingGetUnDeletedUserByIdSpecification
+﻿namespace CityMall.Specifications.Specifications.Users;
+public sealed class AsNoTrackingGetUnDeletedUserByIdSpecification : Specification<User>
 {
+    public AsNoTrackingGetUnDeletedUserByIdSpecification(string id)
+        : base(u => u.Id.Equals(id))
+    {
+        StopTracking();
+    }
 }

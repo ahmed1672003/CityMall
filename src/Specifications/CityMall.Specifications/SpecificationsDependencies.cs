@@ -1,5 +1,5 @@
-﻿using CityMall.Specifications.Specifications;
-using CityMall.Specifications.Specifications.Contracts;
+﻿using CityMall.Specifications.Contracts;
+using CityMall.Specifications.Specifications;
 
 using Microsoft.Extensions.DependencyInjection;
 
