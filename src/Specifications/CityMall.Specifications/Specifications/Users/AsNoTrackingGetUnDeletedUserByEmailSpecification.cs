@@ -5,5 +5,6 @@ public sealed class AsNoTrackingGetUnDeletedUserByEmailSpecification : Specifica
         : base(u => u.Email.Equals(email))
     {
         StopTracking();
+
     }
 }

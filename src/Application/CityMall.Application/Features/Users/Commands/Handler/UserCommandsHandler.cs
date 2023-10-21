@@ -1,9 +1,15 @@
-﻿namespace CityMall.Application.Features.Users.Commands.Handler;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CityMall.Specifications.Specifications.Jwts;
+
+namespace CityMall.Application.Features.Users.Commands.Handler;
 public sealed class UserCommandsHandler :
     IRequestHandler<AddUserCommand, ResponseModel<AuthDto>>,
     IRequestHandler<UpdateUserByIdCommand, ResponseModel<GetUserDto>>,
     IRequestHandler<DeleteUserByIdCoammnd, ResponseModel<GetUserDto>>,
-    IRequestHandler<UndoDeleteUserByIdCommand, ResponseModel<GetUserDto>>
+    IRequestHandler<UndoDeleteUserByIdCommand, ResponseModel<GetUserDto>>,
+    IRequestHandler<LoginUserCommand, ResponseModel<AuthDto>>,
+    IRequestHandler<LogOutUserCommand, ResponseModel<string>>
 {
     #region Fields
     private readonly IUnitOfWork _context;
@@ -190,5 +196,92 @@ public sealed class UserCommandsHandler :
             return ResponseResult.InternalServerError<GetUserDto>(errors: ex.Message);
         }
     }
+    #endregion
+
+    #region Login User
+    public async Task<ResponseModel<AuthDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            ISpecification<User> asNoTrackingGetUnDeletedUserByEmailSpec =
+                _specificationsFactory.CreateUserSpecifications(
+                    typeof(AsNoTrackingGetUnDeletedUserByEmailSpecification), request.Dto.EmailOrUserName);
+
+            ISpecification<User> asNoTrackingGetUnDeletedUserByUserNameSpec =
+                _specificationsFactory.CreateUserSpecifications(
+                    typeof(AsNoTrackingGetUnDeletedUserByUserNameSpecification), request.Dto.EmailOrUserName);
+
+            if (!await _context.Users.AnyAsync(new EmailAddressAttribute().
+                    IsValid(request.Dto.EmailOrUserName) ?
+                        asNoTrackingGetUnDeletedUserByEmailSpec :
+                        asNoTrackingGetUnDeletedUserByUserNameSpec, cancellationToken))
+                return ResponseResult.NotFound<AuthDto>();
+
+            ISpecification<User> asTrackingGetUnDeletedUserByUserNameSpec =
+                _specificationsFactory.CreateUserSpecifications(
+                    typeof(AsTrackingGetUnDeletedUserByUserNameSpecification), request.Dto.EmailOrUserName);
+
+            ISpecification<User> asTrackingGetUnDeletedUserByEmailSpec =
+                _specificationsFactory.CreateUserSpecifications(
+                    typeof(AsTrackingGetUnDeletedUserByEmailSpecification), request.Dto.EmailOrUserName);
+
+            User user = await _context.Users.RetrieveAsync(new EmailAddressAttribute()
+                .IsValid(request.Dto.EmailOrUserName) ?
+                    asTrackingGetUnDeletedUserByEmailSpec :
+                    asTrackingGetUnDeletedUserByUserNameSpec, cancellationToken);
+
+            SignInResult result = await _context.Identity.SignInManager.CheckPasswordSignInAsync(user, request.Dto.Password, false);
+
+            if (!result.Succeeded)
+                return ResponseResult.UnAuthorized<AuthDto>();
+
+            AuthDto Dto = await _services.AuthService.GetJWTAsync(user);
+
+            if (Dto is null)
+                return ResponseResult.UnAuthorized<AuthDto>();
+
+            return ResponseResult.Success(Dto);
+        }
+        catch (Exception ex)
+        {
+            return ResponseResult.InternalServerError<AuthDto>(errors: ex.Message);
+        }
+    }
+    #endregion
+
+    #region LogOut User
+    public async Task<ResponseModel<string>> Handle(LogOutUserCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            ISpecification<UserJWT> asNoTrackingGetUserJwtByJWTWithRefreshJWTSpec =
+                _specificationsFactory.CreateUserJwtsSpecifications(
+                    typeof(AsNoTrackingGetUserJwtByJWTWithRefreshJWTSpecification), request.Dto.Jwt, request.Dto.RefrestToken);
+
+            if (!await _context.UserJWTs.AnyAsync(asNoTrackingGetUserJwtByJWTWithRefreshJWTSpec, cancellationToken))
+                return ResponseResult.NotFound<string>();
+
+
+            ISpecification<UserJWT> asNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Spec =
+                _specificationsFactory.CreateUserJwtsSpecifications(
+                    typeof(AsNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Specification), request.Dto.Jwt, request.Dto.RefrestToken);
+
+            UserJWT userjWT = await _context.UserJWTs.RetrieveAsync(asNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Spec, cancellationToken);
+
+            if (!await _services.AuthService.RevokeJWTAsync(userjWT))
+                return ResponseResult.BadRequest<string>();
+
+            return ResponseResult.Success<string>();
+        }
+        catch (Exception ex)
+        {
+            return ResponseResult.InternalServerError<string>(errors: ex.Message);
+        }
+    }
+    #endregion
+
+    #region Refresh jWT
+
+
     #endregion
 }
