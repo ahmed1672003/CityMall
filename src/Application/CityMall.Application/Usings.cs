@@ -11,6 +11,7 @@ global using CityMall.Dtos.Dtos.Auth;
 global using CityMall.Dtos.Dtos.Emails;
 global using CityMall.Dtos.Dtos.Files;
 global using CityMall.Dtos.Dtos.Users;
+global using CityMall.Dtos.Enums;
 global using CityMall.Infrastructure.Constants;
 global using CityMall.Infrastructure.Repositories.Contracts;
 global using CityMall.Services.Services.Contracts;

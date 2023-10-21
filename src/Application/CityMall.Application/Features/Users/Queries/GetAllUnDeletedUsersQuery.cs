@@ -1,10 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CityMall.Application.Features.Users.Queries;
+public sealed record GetAllUnDeletedUsersQuery() : IRequest<ResponseModel<IEnumerable<GetUserDto>>>;
 
-namespace CityMall.Application.Features.Users.Queries;
-internal class GetAllUnDeletedUsersQuery
-{
-}

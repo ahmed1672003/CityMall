@@ -1,4 +1,2 @@
 ﻿namespace CityMall.Application.Features.Users.Queries;
-internal class SearchAllUsersQuery
-{
-}
+public sealed record SearchAllUsersQuery : IRequest<ResponseModel<IEnumerable<GetUserDto>>>;
