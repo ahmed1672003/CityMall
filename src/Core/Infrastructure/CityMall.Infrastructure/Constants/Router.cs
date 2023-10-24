@@ -6,6 +6,20 @@ public static class Router
     private const string ApiPrefix = Api + ApiVersion;
     public static class User
     {
-        public const string ConfirmeEmail = ApiPrefix + "confirme-email";
+        private const string UserPrefix = ApiPrefix + "users/";
+        public const string AddUser = UserPrefix + "add-user";
+        public const string UpdateUser = UserPrefix + "update-user";
+        public const string DeleteUserById = UserPrefix + "delete-user-by-id";
+        public const string UndoDeleteUserById = UserPrefix + "undo-delete-user-by-id";
+        public const string LoginUser = UserPrefix + "login";
+        public const string LogOutUser = UserPrefix + "logout";
+        public const string RefreshjWT = UserPrefix + "refresh-jWT";
+        public const string ConfirmeEmail = UserPrefix + "confirme-email";
+        public const string GetAll = UserPrefix + "get-all";
+        public const string GetAllUnDeleted = UserPrefix + "get-all-undeleted";
+        public const string GetAllDeleted = UserPrefix + "get-all-deleted";
+        public const string PaginateAll = UserPrefix + "paginate-all";
+        public const string PaginateAllUnDeleted = UserPrefix + "paginate-all-undeleted";
+        public const string PaginateAllDeleted = UserPrefix + "paginate-all-deleted";
     }
 }

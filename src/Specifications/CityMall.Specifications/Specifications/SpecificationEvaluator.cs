@@ -1,5 +1,4 @@
-﻿using CityMall.Specifications.Contracts;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace CityMall.Specifications.Specifications;
 public class SpecificationEvaluator
@@ -13,6 +12,9 @@ public class SpecificationEvaluator
 
         if (specification.IsTrackingOf)
             query = query.AsNoTracking();
+
+        if (specification.IsSplitQuery)
+            query = query.AsSplitQuery();
 
         if (specification.IsTrackingWithIdentityResolutionOf)
             query = query.AsNoTrackingWithIdentityResolution();

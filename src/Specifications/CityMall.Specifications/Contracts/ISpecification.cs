@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace CityMall.Specifications.Contracts;
+﻿namespace CityMall.Specifications.Contracts;
 public interface ISpecification<TEntity> where TEntity : class
 {
     Expression<Func<TEntity, bool>> Criteria { get; }
@@ -11,6 +9,7 @@ public interface ISpecification<TEntity> where TEntity : class
     object ExecuteUpdateValue { get; }
     List<string> IncludesString { get; }
     (int pageNumber, int pageSize) PaginationRequirments { get; }
+    bool IsSplitQuery { get; }
     bool IsPagingEnabled { get; }
     bool IsTrackingOf { get; }
     bool IsTrackingWithIdentityResolutionOf { get; }

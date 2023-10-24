@@ -4,5 +4,6 @@ public sealed class AsNoTrackingGetAllUnDeletedUsersSpecification : Specificatio
     public AsNoTrackingGetAllUnDeletedUsersSpecification()
     {
         StopTracking();
+        AsSplitQuery(true);
     }
 }

@@ -45,7 +45,7 @@ public static class ServicesDependencies
 
         services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("v1", new() { Title = "MasaTourApi", Version = "1.0.0", Contact = new OpenApiContact() { Email = "ahmedadel1672003@gmail.com", Name = "ahmed adel" } });
+            options.SwaggerDoc("v1", new() { Title = "City Mall API", Version = "1.0.0", Contact = new OpenApiContact() { Email = "ahmedadel1672003@gmail.com", Name = "ahmed adel" } });
             options.EnableAnnotations();
             options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new()
             {

@@ -1,5 +1,5 @@
 ﻿namespace CityMall.Specifications.Specifications.Users;
-internal class AsNoTrackingPaginateAllUnDeletedUsersSpecification : Specification<User>
+public sealed class AsNoTrackingPaginateAllUnDeletedUsersSpecification : Specification<User>
 {
     public AsNoTrackingPaginateAllUnDeletedUsersSpecification(int pageNumber = 1, int pageSize = 10, string keyWords = "", Expression<Func<User, object>> orderBy = null)
         : base
@@ -13,6 +13,7 @@ internal class AsNoTrackingPaginateAllUnDeletedUsersSpecification : Specificatio
         )
 
     {
+        AsSplitQuery(true);
         StopTracking();
         ApplyPaging((pageNumber, pageSize));
         AddOrderBy(orderBy);

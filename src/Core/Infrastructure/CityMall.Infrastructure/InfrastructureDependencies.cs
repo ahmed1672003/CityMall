@@ -17,7 +17,7 @@ public static class InfrastructureDependencies
         services.AddIdentity<User, Role>(options =>
         {
             #region Email Options
-            options.SignIn.RequireConfirmedEmail = false;
+            options.SignIn.RequireConfirmedEmail = true;
             options.SignIn.RequireConfirmedPhoneNumber = false;
             options.SignIn.RequireConfirmedAccount = false;
             #endregion
@@ -53,7 +53,6 @@ public static class InfrastructureDependencies
             string redisConnection = configuration.GetConnectionString("Redis");
             redisOptions.Configuration = "";
         });
-
         #endregion
 
         #region Register Contracts

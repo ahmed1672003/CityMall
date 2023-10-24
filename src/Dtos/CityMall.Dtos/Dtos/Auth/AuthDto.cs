@@ -1,6 +1,17 @@
-﻿namespace CityMall.Dtos.Dtos.Auth;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CityMall.Dtos.Dtos.Auth;
 public sealed class AuthDto
 {
-    public JwtDto JwtDto { get; set; }
-    public RefreshJwtDto RefreshJwtDto { get; set; }
+    public GetJwtDto JwtDto { get; set; }
+    public GetRefreshJwtDto RefreshJwtDto { get; set; }
+}
+
+public sealed class UpdateRefreshTokenDto
+{
+    [Required]
+    public string JWT { get; set; }
+
+    [Required]
+    public string RefreshToken { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using CityMall.Dtos.Dtos.Auth;
 using CityMall.Infrastructure.Repositories.Contracts;
 using CityMall.Specifications.Contracts;
+using CityMall.Specifications.Specifications.Roles;
 
 namespace CityMall.Services.Services;
 public sealed class AuthService : IAuthService
@@ -223,9 +224,9 @@ public sealed class AuthService : IAuthService
     /// Get refresh token
     /// </summary>
     /// <returns>RefreshJwtDto</returns>
-    private RefreshJwtDto GetRefreshToken()
+    private GetRefreshJwtDto GetRefreshToken()
     {
-        var refreshToken = new RefreshJwtDto
+        var refreshToken = new GetRefreshJwtDto
         {
             RefreshJWTExpirationDate = DateTime.Now.AddDays(_jWTSettings.RefreshTokenExpireDate),
             RefreshJWT = GenerateRefreshToken()
@@ -263,43 +264,42 @@ public sealed class AuthService : IAuthService
 
     private async Task<List<Claim>> GetClaimsAsync(User user)
     {
-        //var userRolesNames = await _context.Identity.UserManager.GetRolesAsync(user);
-        //var userClaims = await _context.Identity.UserManager.GetClaimsAsync(user);
+        var userRolesNames = await _context.Identity.UserManager.GetRolesAsync(user);
+        var userClaims = await _context.Identity.UserManager.GetClaimsAsync(user);
 
-        //#region Get Permissions
+        #region Get Permissions
 
-        //// get user roles
-        ////GetRolesByNameSpecification getRolesByNameSpec = new(userRolesNames);
-        //var getRolesByNameSpec = _specificationsFactory.CreateRoleSpecifications(typeof(AsNoTrackingGetRolesByNameSpecification), userRolesNames);
+        // get user roles
+        //GetRolesByNameSpecification getRolesByNameSpec = new(userRolesNames);
+        var getRolesByNameSpec = _specificationsFactory.CreateRoleSpecifications(typeof(AsNoTrackingGetAllRoleByRoleNamesSpecification), userRolesNames);
 
-        //var userRoles = (await _context.Roles.RetrieveAllAsync(getRolesByNameSpec)).ToList();
+        var userRoles = (await _context.Roles.RetrieveAllAsync(getRolesByNameSpec)).ToList();
 
-        //// get role claims
-        //var permissions = new List<Claim>();
-        //foreach (var role in userRoles)
-        //{
-        //    var roleClams = await _context.Identity.RoleManager.GetClaimsAsync(role);
-        //    permissions.AddRange(roleClams);
-        //}
+        // get role claims
+        var permissions = new List<Claim>();
+        foreach (var role in userRoles)
+        {
+            var roleClams = await _context.Identity.RoleManager.GetClaimsAsync(role);
+            permissions.AddRange(roleClams);
+        }
 
-        //#endregion
+        #endregion
 
-        //var claims = new List<Claim>()
-        //{
-        //    new (ClaimTypes.PrimarySid, user.Id),
-        //    new (ClaimTypes.Name,user.UserName),
-        //    new (ClaimTypes.Email,user.Email),
-        //    new (ClaimTypes.MobilePhone, user.PhoneNumber),
-        //};
+        var claims = new List<Claim>()
+        {
+            new (ClaimTypes.PrimarySid, user.Id),
+            new (ClaimTypes.Name,user.UserName),
+            new (ClaimTypes.Email,user.Email),
+            new (ClaimTypes.MobilePhone, user.PhoneNumber),
+        };
 
-        //foreach (var role in userRolesNames)
-        //    claims.Add(new(ClaimTypes.Role, role));
+        foreach (var role in userRolesNames)
+            claims.Add(new(ClaimTypes.Role, role));
 
+        claims.AddRange(userClaims);
+        claims.AddRange(permissions);
 
-        //claims.AddRange(userClaims);
-        //claims.AddRange(permissions);
-
-        //return claims;
+        return claims;
         throw new NotImplementedException();
     }
 

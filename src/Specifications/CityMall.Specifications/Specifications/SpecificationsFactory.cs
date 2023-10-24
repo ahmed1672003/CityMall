@@ -1,4 +1,5 @@
 ﻿using CityMall.Specifications.Specifications.Jwts;
+using CityMall.Specifications.Specifications.Roles;
 
 namespace CityMall.Specifications.Specifications;
 
@@ -42,6 +43,14 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
             "AsTrackingGetUnDeletedUserByIdSpecification" => new AsTrackingGetUnDeletedUserByIdSpecification(parameters[0]),
             "AsTrackingGetUnDeletedUserByUserNameSpecification" => new AsTrackingGetUnDeletedUserByUserNameSpecification(parameters[0]),
             "AsTrackingGetUnDeletedUserByEmailSpecification" => new AsTrackingGetUnDeletedUserByEmailSpecification(parameters[0]),
+            _ => throw new InvalidOperationException()
+        };
+    }
+    public ISpecification<Role> CreateRoleSpecifications(Type type, params dynamic[] parameters)
+    {
+        return type.Name switch
+        {
+            "AsNoTrackingGetAllRoleByRoleNamesSpecification" => new AsNoTrackingGetAllRoleByRoleNamesSpecification(parameters[0]),
             _ => throw new InvalidOperationException()
         };
     }

@@ -12,6 +12,7 @@ public sealed class AsNoTrackingPaginateAllUsersSpecification : Specification<Us
              u.LastName.Contains(keyWords))
         )
     {
+        AsSplitQuery(true);
         StopTracking();
         IgnorQueryFilter();
         ApplyPaging((pageNumber, pageSize));

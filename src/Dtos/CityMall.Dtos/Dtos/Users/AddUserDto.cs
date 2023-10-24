@@ -34,10 +34,12 @@ public sealed class AddUserDto
     [Description("Email is unique")]
     public string Email { get; set; }
 
+    [Phone]
     [Required]
     [MaxLength(255)]
     public string PhoneNumber { get; set; }
 
+    [Phone]
     [Required]
     [MaxLength(255)]
     public string WhatsAppNumber { get; set; }

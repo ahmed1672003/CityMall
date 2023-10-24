@@ -12,6 +12,7 @@ public sealed class UserProfile : Profile
     void Map()
     {
         CreateMap<AddUserDto, User>();
+        CreateMap<User, GetUserDto>();
     }
 }
 

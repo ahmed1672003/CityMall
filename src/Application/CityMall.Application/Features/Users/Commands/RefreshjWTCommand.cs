@@ -1,3 +1,3 @@
 ﻿namespace CityMall.Application.Features.Users.Commands;
-public sealed class RefreshjWTCommand
+public sealed record RefreshjWTCommand(UpdateRefreshTokenDto Dto) : IRequest<ResponseModel<AuthDto>>;
 

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
 
 using CityMall.Specifications.Specifications.Jwts;
-
 namespace CityMall.Application.Features.Users.Commands.Handler;
 public sealed class UserCommandsHandler :
     IRequestHandler<AddUserCommand, ResponseModel<AuthDto>>,
@@ -9,7 +9,10 @@ public sealed class UserCommandsHandler :
     IRequestHandler<DeleteUserByIdCoammnd, ResponseModel<GetUserDto>>,
     IRequestHandler<UndoDeleteUserByIdCommand, ResponseModel<GetUserDto>>,
     IRequestHandler<LoginUserCommand, ResponseModel<AuthDto>>,
-    IRequestHandler<LogOutUserCommand, ResponseModel<string>>
+    IRequestHandler<RefreshjWTCommand, ResponseModel<AuthDto>>,
+    IRequestHandler<LogOutUserCommand, ResponseModel<string>>,
+    IRequestHandler<ConfirmeEmailCommand, ResponseModel<string>>
+
 {
     #region Fields
     private readonly IUnitOfWork _context;
@@ -31,8 +34,8 @@ public sealed class UserCommandsHandler :
     #endregion
 
     #region Add User
-    public async Task<ResponseModel<AuthDto>> Handle(AddUserCommand request, CancellationToken cancellationToken)
-
+    public async Task<ResponseModel<AuthDto>>
+            Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -86,8 +89,8 @@ public sealed class UserCommandsHandler :
             // set confirme email parameters
             Dictionary<string, string> parameters = new Dictionary<string, string>
             {
-                {"Token",token},
-                { "UserId" , user.Id}
+                { "userId" , user.Id},
+                {"token",token}
             };
 
             // create uri
@@ -116,7 +119,8 @@ public sealed class UserCommandsHandler :
     #endregion
 
     #region Update User Data
-    public async Task<ResponseModel<GetUserDto>> Handle(UpdateUserByIdCommand request, CancellationToken cancellationToken)
+    public async Task<ResponseModel<GetUserDto>>
+            Handle(UpdateUserByIdCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -149,7 +153,8 @@ public sealed class UserCommandsHandler :
     #endregion
 
     #region Delete User By Id
-    public async Task<ResponseModel<GetUserDto>> Handle(DeleteUserByIdCoammnd request, CancellationToken cancellationToken)
+    public async Task<ResponseModel<GetUserDto>>
+            Handle(DeleteUserByIdCoammnd request, CancellationToken cancellationToken)
     {
         try
         {
@@ -171,7 +176,8 @@ public sealed class UserCommandsHandler :
     #endregion
 
     #region Undo Delete User By Id
-    public async Task<ResponseModel<GetUserDto>> Handle(UndoDeleteUserByIdCommand request, CancellationToken cancellationToken)
+    public async Task<ResponseModel<GetUserDto>>
+            Handle(UndoDeleteUserByIdCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -199,7 +205,8 @@ public sealed class UserCommandsHandler :
     #endregion
 
     #region Login User
-    public async Task<ResponseModel<AuthDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<ResponseModel<AuthDto>>
+            Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -230,6 +237,9 @@ public sealed class UserCommandsHandler :
                     asTrackingGetUnDeletedUserByEmailSpec :
                     asTrackingGetUnDeletedUserByUserNameSpec, cancellationToken);
 
+            if (!user.EmailConfirmed)
+                return ResponseResult.UnAuthorized<AuthDto>();
+
             SignInResult result = await _context.Identity.SignInManager.CheckPasswordSignInAsync(user, request.Dto.Password, false);
 
             if (!result.Succeeded)
@@ -250,23 +260,27 @@ public sealed class UserCommandsHandler :
     #endregion
 
     #region LogOut User
-    public async Task<ResponseModel<string>> Handle(LogOutUserCommand request, CancellationToken cancellationToken)
+    public async Task<ResponseModel<string>>
+            Handle(LogOutUserCommand request, CancellationToken cancellationToken)
     {
         try
         {
             ISpecification<UserJWT> asNoTrackingGetUserJwtByJWTWithRefreshJWTSpec =
                 _specificationsFactory.CreateUserJwtsSpecifications(
-                    typeof(AsNoTrackingGetUserJwtByJWTWithRefreshJWTSpecification), request.Dto.Jwt, request.Dto.RefrestToken);
+                    typeof(AsNoTrackingGetUserJwtByJWTWithRefreshJWTSpecification),
+                        request.Dto.Jwt, request.Dto.RefrestToken);
 
             if (!await _context.UserJWTs.AnyAsync(asNoTrackingGetUserJwtByJWTWithRefreshJWTSpec, cancellationToken))
                 return ResponseResult.NotFound<string>();
 
-
             ISpecification<UserJWT> asNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Spec =
-                _specificationsFactory.CreateUserJwtsSpecifications(
-                    typeof(AsNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Specification), request.Dto.Jwt, request.Dto.RefrestToken);
+                    _specificationsFactory.CreateUserJwtsSpecifications(
+                        typeof(AsNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Specification),
+                            request.Dto.Jwt, request.Dto.RefrestToken);
 
-            UserJWT userjWT = await _context.UserJWTs.RetrieveAsync(asNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Spec, cancellationToken);
+            UserJWT userjWT = await _context.UserJWTs.RetrieveAsync(
+                                asNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Spec,
+                                    cancellationToken);
 
             if (!await _services.AuthService.RevokeJWTAsync(userjWT))
                 return ResponseResult.BadRequest<string>();
@@ -281,7 +295,62 @@ public sealed class UserCommandsHandler :
     #endregion
 
     #region Refresh jWT
+    public async Task<ResponseModel<AuthDto>>
+            Handle(RefreshjWTCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            ISpecification<UserJWT> AsNoTrackingGetUserJwtByJWTWithRefreshJWTSpec =
+                _specificationsFactory.CreateUserJwtsSpecifications(
+                    typeof(AsNoTrackingGetUserJwtByJWTWithRefreshJWTSpecification),
+                         request.Dto.JWT, request.Dto.RefreshToken);
 
+            if (!await _context.UserJWTs.AnyAsync(AsNoTrackingGetUserJwtByJWTWithRefreshJWTSpec, cancellationToken))
+                return ResponseResult.NotFound<AuthDto>();
 
+            JwtSecurityToken jwtSecurityToken = await _services.AuthService.ReadJWTAsync(request.Dto.JWT);
+
+            if (!await _services.AuthService.IsJWTValid.Invoke(request.Dto.JWT, jwtSecurityToken))
+                return ResponseResult.BadRequest<AuthDto>();
+
+            ISpecification<UserJWT> asNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Spec =
+                _specificationsFactory.CreateUserJwtsSpecifications(
+                    typeof(AsNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Specification),
+                            request.Dto.JWT, request.Dto.RefreshToken);
+
+            UserJWT userjWT = await _context.UserJWTs.RetrieveAsync(asNoTrackingGetUserJwtByJWTWithRefreshJWT_User_Spec, cancellationToken);
+
+            if (userjWT.User is null)
+                return ResponseResult.NotFound<AuthDto>();
+
+            AuthDto dto = await _services.AuthService.RefreshJWTAsync(userjWT.User);
+
+            if (dto is null)
+                return ResponseResult.BadRequest<AuthDto>();
+
+            return ResponseResult.Success(dto);
+        }
+        catch (Exception ex)
+        {
+            return ResponseResult.InternalServerError<AuthDto>(errors: ex.Message);
+        }
+    }
+    #endregion
+
+    #region Confirme Email
+    public async Task<ResponseModel<string>> Handle(ConfirmeEmailCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (!await _context.Identity.ConfirmEmailAsync(request.UserId, request.Token))
+                return ResponseResult.BadRequest<string>();
+
+            return ResponseResult.Success<string>();
+        }
+        catch (Exception ex)
+        {
+            return ResponseResult.InternalServerError<string>(errors: ex.Message);
+        }
+    }
     #endregion
 }

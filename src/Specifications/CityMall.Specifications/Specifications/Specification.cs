@@ -1,7 +1,4 @@
-﻿using System.Linq.Expressions;
-using CityMall.Specifications.Contracts;
-
-namespace CityMall.Specifications.Specifications;
+﻿namespace CityMall.Specifications.Specifications;
 public class Specification<TEntity> : ISpecification<TEntity> where TEntity : class
 {
     public Specification(Expression<Func<TEntity, bool>> criteria = null)
@@ -15,13 +12,14 @@ public class Specification<TEntity> : ISpecification<TEntity> where TEntity : cl
     public Expression<Func<TEntity, object>> OrderBy { get; private set; }
     public Expression<Func<TEntity, object>> OrderByDescending { get; private set; }
     public Expression<Func<TEntity, object>> GroupBy { get; private set; }
+    public bool IsSplitQuery { get; private set; }
     public bool IsPagingEnabled { get; private set; }
     public bool IsTrackingOf { get; private set; }
     public bool IsTrackingWithIdentityResolutionOf { get; private set; }
     public bool IsQueryFilterIgnored { get; private set; }
     public (int pageNumber, int pageSize) PaginationRequirments { get; private set; }
     public object ExecuteUpdateValue { get; private set; }
-
+    protected virtual void AsSplitQuery(bool isSplitQuery) => IsSplitQuery = isSplitQuery ? true : false;
     protected virtual void AddIncludes(Expression<Func<TEntity, object>> include) => Includes.Add(include);
     protected virtual void AddIncludesString(string includesString) => IncludesString.Add(includesString);
     protected virtual void AddOrderBy(Expression<Func<TEntity, object>> orderBy) => OrderBy = orderBy;

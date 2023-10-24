@@ -15,7 +15,7 @@ public sealed class IdentityRepository : IIdentityRepository
     public SignInManager<User> SignInManager { get; }
     public RoleManager<Role> RoleManager { get; }
 
-    public async Task<bool> ConfirmEmailAsync(string token, string userId, CancellationToken cancellationToken = default)
+    public async Task<bool> ConfirmEmailAsync(string userId, string token, CancellationToken cancellationToken = default)
     {
         try
         {
