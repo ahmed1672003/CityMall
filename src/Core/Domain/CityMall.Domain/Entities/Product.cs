@@ -25,7 +25,6 @@ public sealed class Product : BaseEntity, ICreateableTracker, IDeleteableTracker
     [DataType(DataType.MultilineText)]
     public string? Description { get; set; }
 
-
     [Required]
     public decimal UnitPrice { get; set; }
 
@@ -41,5 +40,10 @@ public sealed class Product : BaseEntity, ICreateableTracker, IDeleteableTracker
     [ForeignKey(name: nameof(StockId))]
     public Stock Stock { get; set; }
     public List<ProductAttributeMapper> ProductAttributeMappers { get; set; }
-    public Product() => ProductAttributeMappers = new(0);
+    public List<CartItem> CartItems { get; set; }
+    public Product()
+    {
+        ProductAttributeMappers = new(0);
+        CartItems = new(0);
+    }
 }
