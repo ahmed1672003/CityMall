@@ -34,7 +34,7 @@ public sealed class AuthService : IAuthService
     {
         var authDto = new AuthDto();
 
-        if (user.UserJWTs.Any(jwt => jwt.IsRefreshJWTActive))
+        if (user.UserJWTs.Count > 0 && user.UserJWTs.Any(jwt => jwt.IsRefreshJWTActive))
         {
             var activeUserJWT = user.UserJWTs.Where(jwt => jwt.IsRefreshJWTActive).FirstOrDefault();
 
@@ -69,7 +69,7 @@ public sealed class AuthService : IAuthService
             try
             {
                 user.UserJWTs.Add(userJWT);
-                await _context.Users.UpdateAsync(user);
+                // await _context.Users.UpdateAsync(user);
                 await _context.SaveChangesAsync();
             }
             catch
@@ -117,36 +117,45 @@ public sealed class AuthService : IAuthService
     /// </summary>
     /// <param name="user">specific user need to refresh token</param>
     /// <returns>Task of AuthDto</returns>
-    public async Task<AuthDto> RefreshJWTAsync(User user)
+    public async Task<AuthDto> RefreshJWTAsync(UserJWT userjWT)
     {
-        var userJWT = user.UserJWTs.FirstOrDefault(u => u.IsRefreshJWTActive);
-
-        if (userJWT is null)
-            return null;
-
         // revoke refresh JWT
-        userJWT.RefreshJWTRevokedDate = DateTime.Now;
-        userJWT.IsRefreshJWTUsed = false;
+        userjWT.RefreshJWTRevokedDate = DateTime.Now;
+        userjWT.IsRefreshJWTUsed = false;
 
-        var jwt = await GenerateJWTAsync(user, GetClaimsAsync);
+        var jwt = await GenerateJWTAsync(userjWT.User, GetClaimsAsync);
         var refreshJWT = GenerateRefreshToken();
 
         // add new refresh token to user
         var newUserJWT = new UserJWT()
         {
-            UserId = user.Id,
+            UserId = userjWT.User.Id,
             JWT = jwt,
             JWTExpirationDate = DateTime.Now.AddDays(_jWTSettings.AccessTokenExpireDate),
             RefreshJWT = refreshJWT,
             RefreshJWTExpirtionDate = DateTime.Now.AddDays(_jWTSettings.RefreshTokenExpireDate),
             IsRefreshJWTUsed = true,
         };
-        user.UserJWTs.Add(newUserJWT);
+        using (var transaction = await _context.BeginTransactionAsync())
+        {
+            try
+            {
+                await _context.UserJWTs.UpdateAsync(userjWT);
+                await _context.UserJWTs.CreateAsync(newUserJWT);
+                await _context.SaveChangesAsync();
+                await _context.CommitTransactionAsync();
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+            }
+        }
 
-        var identityResult = await _context.Identity.UserManager.UpdateAsync(user);
 
-        if (!identityResult.Succeeded)
-            return null;
+        //var identityResult = await _context.Identity.UserManager.UpdateAsync(user);
+
+        //if (!identityResult.Succeeded)
+        //    return null;
 
         return new AuthDto()
         {
@@ -290,7 +299,6 @@ public sealed class AuthService : IAuthService
             new (ClaimTypes.PrimarySid, user.Id),
             new (ClaimTypes.Name,user.UserName),
             new (ClaimTypes.Email,user.Email),
-            new (ClaimTypes.MobilePhone, user.PhoneNumber),
         };
 
         foreach (var role in userRolesNames)

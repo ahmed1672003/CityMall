@@ -2,6 +2,7 @@
 
 global using CityMall.Domain.Abstracts;
 global using CityMall.Domain.Constants;
+global using CityMall.Domain.Entities;
 global using CityMall.Domain.Entities.Identity;
 global using CityMall.Infrastructure.Context;
 global using CityMall.Infrastructure.Context.Interceptors;

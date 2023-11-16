@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\Services\CityMall.Services\CityMall.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Email\Commands\" />
+  </ItemGroup>
+
 </Project>

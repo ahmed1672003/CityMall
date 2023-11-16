@@ -9,12 +9,6 @@ public sealed class LoginUserDto
 
     [Required]
     [MaxLength(255)]
-    [MinLength(5)]
+    [MinLength(3)]
     public string Password { get; set; }
-
-    [Required]
-    [MaxLength(255)]
-    [MinLength(5)]
-    [Compare(nameof(Password))]
-    public string ConfirmationPassword { get; set; }
 }

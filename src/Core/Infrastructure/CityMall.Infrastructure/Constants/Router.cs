@@ -15,11 +15,20 @@ public static class Router
         public const string LogOutUser = UserPrefix + "logout";
         public const string RefreshjWT = UserPrefix + "refresh-jWT";
         public const string ConfirmeEmail = UserPrefix + "confirme-email";
+        public const string ChangePassword = UserPrefix + "change-password";
+        public const string SendResetPasswordToken = UserPrefix + "send-reset-passwordtoken";
+        public const string ResetPassword = UserPrefix + "reset-password";
         public const string GetAll = UserPrefix + "get-all";
         public const string GetAllUnDeleted = UserPrefix + "get-all-undeleted";
         public const string GetAllDeleted = UserPrefix + "get-all-deleted";
         public const string PaginateAll = UserPrefix + "paginate-all";
         public const string PaginateAllUnDeleted = UserPrefix + "paginate-all-undeleted";
         public const string PaginateAllDeleted = UserPrefix + "paginate-all-deleted";
+    }
+
+    public static class Emails
+    {
+        private const string EmailPrefix = ApiPrefix + "emails";
+        public const string SendEmailsToAllUsers = EmailPrefix + "send-emails-to-all-users";
     }
 }

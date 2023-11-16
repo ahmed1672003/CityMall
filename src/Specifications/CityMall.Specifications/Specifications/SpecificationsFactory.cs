@@ -14,7 +14,6 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
             _ => throw new InvalidOperationException()
         };
     }
-
     public ISpecification<User> CreateUserSpecifications(Type type, params dynamic[] parameters)
     {
         return type.Name switch
@@ -39,6 +38,8 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
             "AsNoTrackingPaginateAllDeletedUsersSpecifications" => new AsNoTrackingPaginateAllDeletedUsersSpecifications(parameters[0], parameters[1], parameters[2], parameters[3]),
             "AsNoTrackingPaginateAllUnDeletedUsersSpecification" => new AsNoTrackingPaginateAllUnDeletedUsersSpecification(parameters[0], parameters[1], parameters[2], parameters[3]),
             "AsNoTrackingPaginateAllUsersSpecification" => new AsNoTrackingPaginateAllUsersSpecification(parameters[0], parameters[1], parameters[2], parameters[3]),
+            "AsTrackingGetUnDeletedUserByEmail_UserjWTs_Specification" => new AsTrackingGetUnDeletedUserByEmail_UserjWTs_Specification(parameters[0]),
+            "AsTrackingGetUnDeletedUserByUserName_UserjWTs_Specification" => new AsTrackingGetUnDeletedUserByUserName_UserjWTs_Specification(parameters[0]),
             "AsTrackingGetDeletedUserByIdSpecification" => new AsTrackingGetDeletedUserByIdSpecification(parameters[0]),
             "AsTrackingGetUnDeletedUserByIdSpecification" => new AsTrackingGetUnDeletedUserByIdSpecification(parameters[0]),
             "AsTrackingGetUnDeletedUserByUserNameSpecification" => new AsTrackingGetUnDeletedUserByUserNameSpecification(parameters[0]),

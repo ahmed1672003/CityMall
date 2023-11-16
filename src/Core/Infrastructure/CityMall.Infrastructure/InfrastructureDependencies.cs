@@ -18,8 +18,8 @@ public static class InfrastructureDependencies
         {
             #region Email Options
             options.SignIn.RequireConfirmedEmail = true;
-            options.SignIn.RequireConfirmedPhoneNumber = false;
-            options.SignIn.RequireConfirmedAccount = false;
+            // options.SignIn.RequireConfirmedPhoneNumber = false;
+            options.SignIn.RequireConfirmedAccount = true;
             #endregion
 
             #region Stores Options
@@ -27,11 +27,11 @@ public static class InfrastructureDependencies
             #endregion
 
             #region Password Options
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireLowercase = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequireDigit = false;
-            options.Password.RequiredLength = 3;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequireDigit = true;
+            options.Password.RequiredLength = 8;
             #endregion
 
             #region User Options

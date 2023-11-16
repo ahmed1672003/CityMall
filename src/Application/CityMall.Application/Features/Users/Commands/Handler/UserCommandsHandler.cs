@@ -2,6 +2,9 @@
 using System.IdentityModel.Tokens.Jwt;
 
 using CityMall.Specifications.Specifications.Jwts;
+
+using Microsoft.EntityFrameworkCore.Storage;
+
 namespace CityMall.Application.Features.Users.Commands.Handler;
 public sealed class UserCommandsHandler :
     IRequestHandler<AddUserCommand, ResponseModel<AuthDto>>,
@@ -11,8 +14,10 @@ public sealed class UserCommandsHandler :
     IRequestHandler<LoginUserCommand, ResponseModel<AuthDto>>,
     IRequestHandler<RefreshjWTCommand, ResponseModel<AuthDto>>,
     IRequestHandler<LogOutUserCommand, ResponseModel<string>>,
-    IRequestHandler<ConfirmeEmailCommand, ResponseModel<string>>
-
+    IRequestHandler<ConfirmeEmailCommand, ResponseModel<string>>,
+    IRequestHandler<ChangePasswordCommand, ResponseModel<string>>,
+    IRequestHandler<SendResetPasswordTokenCommand, ResponseModel<SendEmailDto>>,
+    IRequestHandler<ResetPasswordCommand, ResponseModel<string>>
 {
     #region Fields
     private readonly IUnitOfWork _context;
@@ -74,7 +79,7 @@ public sealed class UserCommandsHandler :
                 user.FileName = uploadFileResult.FileName;
                 user.FilePath = uploadFileResult.FilePath;
             }
-            IdentityResult result = await _context.Identity.UserManager.CreateAsync(user);
+            IdentityResult result = await _context.Identity.UserManager.CreateAsync(user, request.Dto.Password);
 
             if (!result.Succeeded)
                 return ResponseResult.BadRequest<AuthDto>();
@@ -136,10 +141,10 @@ public sealed class UserCommandsHandler :
                     typeof(AsTrackingGetUnDeletedUserByIdSpecification), request.Dto.UserId);
 
             User user = await _context.Users.RetrieveAsync(asTrackingGetUnDeletedUserByIdSpec, cancellationToken);
-            user.FirstName = user.FirstName;
-            user.LastName = user.LastName;
-            user.PhoneNumber = user.PhoneNumber;
-            user.WhatsAppNumber = user.WhatsAppNumber;
+            user.FirstName = request.Dto.FirstName;
+            user.LastName = request.Dto.LastName;
+            user.PhoneNumber = request.Dto.PhoneNumber;
+            user.WhatsAppNumber = request.Dto.WhatsAppNumber;
             await _context.SaveChangesAsync(cancellationToken);
             GetUserDto Dto = _mapper.Map<GetUserDto>(user);
             return ResponseResult.Success(Dto);
@@ -224,25 +229,23 @@ public sealed class UserCommandsHandler :
                         asNoTrackingGetUnDeletedUserByUserNameSpec, cancellationToken))
                 return ResponseResult.NotFound<AuthDto>();
 
-            ISpecification<User> asTrackingGetUnDeletedUserByUserNameSpec =
+            ISpecification<User> asTrackingGetUnDeletedUserByUserName_UserjWTs_Spec =
                 _specificationsFactory.CreateUserSpecifications(
-                    typeof(AsTrackingGetUnDeletedUserByUserNameSpecification), request.Dto.EmailOrUserName);
+                    typeof(AsTrackingGetUnDeletedUserByUserName_UserjWTs_Specification), request.Dto.EmailOrUserName);
 
-            ISpecification<User> asTrackingGetUnDeletedUserByEmailSpec =
+            ISpecification<User> asTrackingGetUnDeletedUserByEmail_UserjWTs_Spec =
                 _specificationsFactory.CreateUserSpecifications(
-                    typeof(AsTrackingGetUnDeletedUserByEmailSpecification), request.Dto.EmailOrUserName);
+                    typeof(AsTrackingGetUnDeletedUserByEmail_UserjWTs_Specification), request.Dto.EmailOrUserName);
 
             User user = await _context.Users.RetrieveAsync(new EmailAddressAttribute()
                 .IsValid(request.Dto.EmailOrUserName) ?
-                    asTrackingGetUnDeletedUserByEmailSpec :
-                    asTrackingGetUnDeletedUserByUserNameSpec, cancellationToken);
+                    asTrackingGetUnDeletedUserByEmail_UserjWTs_Spec :
+                    asTrackingGetUnDeletedUserByUserName_UserjWTs_Spec, cancellationToken);
 
             if (!user.EmailConfirmed)
                 return ResponseResult.UnAuthorized<AuthDto>();
 
-            SignInResult result = await _context.Identity.SignInManager.CheckPasswordSignInAsync(user, request.Dto.Password, false);
-
-            if (!result.Succeeded)
+            if (!await _context.Identity.UserManager.CheckPasswordAsync(user, request.Dto.Password))
                 return ResponseResult.UnAuthorized<AuthDto>();
 
             AuthDto Dto = await _services.AuthService.GetJWTAsync(user);
@@ -323,7 +326,7 @@ public sealed class UserCommandsHandler :
             if (userjWT.User is null)
                 return ResponseResult.NotFound<AuthDto>();
 
-            AuthDto dto = await _services.AuthService.RefreshJWTAsync(userjWT.User);
+            AuthDto dto = await _services.AuthService.RefreshJWTAsync(userjWT);
 
             if (dto is null)
                 return ResponseResult.BadRequest<AuthDto>();
@@ -343,6 +346,123 @@ public sealed class UserCommandsHandler :
         try
         {
             if (!await _context.Identity.ConfirmEmailAsync(request.UserId, request.Token))
+                return ResponseResult.BadRequest<string>();
+
+            return ResponseResult.Success<string>();
+        }
+        catch (Exception ex)
+        {
+            return ResponseResult.InternalServerError<string>(errors: ex.Message);
+        }
+    }
+    #endregion
+
+    #region Change Password
+    public async Task<ResponseModel<string>>
+        Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            ISpecification<User> asNoTrackingGetUnDeletedUserByEmailSpec = _specificationsFactory.CreateUserSpecifications(
+                    typeof(AsNoTrackingGetUnDeletedUserByEmailSpecification),
+                        request.Dto.Email);
+
+            if (!await _context.Users.AnyAsync(asNoTrackingGetUnDeletedUserByEmailSpec, cancellationToken))
+                return ResponseResult.NotFound<string>();
+
+            User user = await _context.Users.RetrieveAsync(asNoTrackingGetUnDeletedUserByEmailSpec, cancellationToken);
+
+
+
+            //bool checkPasswordSuccess = await _context.Identity.UserManager.CheckPasswordAsync(user, request.Dto.OldPassword);
+
+            //if (!checkPasswordSuccess)
+            //    return ResponseResult.BadRequest<string>();
+
+
+            IdentityResult identityResult = await _context.Identity.UserManager.ChangePasswordAsync(user, request.Dto.CurrentPassord, request.Dto.NewPassword);
+
+            if (!identityResult.Succeeded)
+                return ResponseResult.UnAuthorized<string>();
+
+            return ResponseResult.Success<string>();
+        }
+        catch (Exception ex)
+        {
+            return ResponseResult.InternalServerError<string>(errors: ex.Message);
+        }
+    }
+    #endregion
+
+    #region Send Reset Password Code
+    public async Task<ResponseModel<SendEmailDto>>
+        Handle(SendResetPasswordTokenCommand request, CancellationToken cancellationToken)
+    {
+
+        ISpecification<User> asNoTrackingGetUnDeletedUserByIdSpec = _specificationsFactory.CreateUserSpecifications(
+                typeof(AsNoTrackingGetUnDeletedUserByIdSpecification),
+                    request.Dto.UserId);
+
+        if (!await _context.Users.AnyAsync(asNoTrackingGetUnDeletedUserByIdSpec, cancellationToken))
+            return ResponseResult.NotFound<SendEmailDto>();
+
+        // generate
+        ISpecification<User> asTrackingGetUnDeletedUserByIdSpec = _specificationsFactory.CreateUserSpecifications(
+            typeof(AsTrackingGetUnDeletedUserByIdSpecification),
+                    request.Dto.UserId);
+
+        User user = await _context.Users.RetrieveAsync(asTrackingGetUnDeletedUserByIdSpec, cancellationToken);
+
+        if (user.EmailConfirmed)
+            return ResponseResult.BadRequest<SendEmailDto>();
+
+        SendEmailDto sendEmailDto = new SendEmailDto();
+        using (IDbContextTransaction transaction = await _context.BeginTransactionAsync(cancellationToken))
+        {
+            try
+            {
+                user.ChangePasswordToken = await _context.Identity.UserManager.GeneratePasswordResetTokenAsync(user);
+                await _context.SaveChangesAsync(cancellationToken);
+
+                sendEmailDto = await _services.EmailService.SendEmailAsync(
+                     request.Dto.Email, "Reset your password", user.ChangePasswordToken);
+
+                if (!sendEmailDto.IsSendSuccess)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    return ResponseResult.BadRequest<SendEmailDto>();
+                }
+                await transaction.CommitAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+            }
+        }
+        return ResponseResult.Success(sendEmailDto);
+    }
+    #endregion
+
+    #region Reset Password 
+    public async Task<ResponseModel<string>>
+        Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            ISpecification<User> asNoTrackingGetUnDeletedUserByIdSpec = _specificationsFactory.CreateUserSpecifications(
+                    typeof(AsNoTrackingGetUnDeletedUserByIdSpecification),
+                        request.Dto.UserId);
+
+            if (!await _context.Users.AnyAsync(asNoTrackingGetUnDeletedUserByIdSpec, cancellationToken))
+                return ResponseResult.NotFound<string>();
+
+            User user = await _context.Users.RetrieveAsync(asNoTrackingGetUnDeletedUserByIdSpec, cancellationToken);
+
+            IdentityResult resetPasswordResult = await _context.Identity.UserManager.
+                                                                    ResetPasswordAsync(
+                                                                    user, request.Dto.Token, request.Dto.NewPassword);
+
+            if (!resetPasswordResult.Succeeded)
                 return ResponseResult.BadRequest<string>();
 
             return ResponseResult.Success<string>();

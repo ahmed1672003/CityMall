@@ -9,3 +9,5 @@ public sealed class SendEmailDto
     public bool IsSendSuccess { get; set; }
     public string DisplayName { get; set; }
 }
+
+

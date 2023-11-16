@@ -29,6 +29,7 @@ public sealed class UserQueriesHandler :
         _httpContextAccessor = httpContextAccessor;
     }
     #endregion
+
     public async Task<ResponseModel<IEnumerable<GetUserDto>>>
             Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {

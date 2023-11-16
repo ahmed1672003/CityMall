@@ -1,21 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using CityMall.Application.Features.Users.Commands;
-using CityMall.Application.Features.Users.Queries;
-using CityMall.Dtos.Enums;
-using CityMall.Infrastructure.Constants;
-
-using MediatR;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace CityMall.API.Controllers;
+﻿namespace CityMall.API.Controllers;
 
 /// <summary>
 /// user services 
 /// </summary>
 [ApiController]
+[AllowAnonymous]
 public class UsersController : CityMallController
 {
     /// <summary>
@@ -30,7 +19,6 @@ public class UsersController : CityMallController
     /// <param name="cmd"></param>
     /// <returns></returns>
     [HttpPost(Router.User.AddUser)]
-    [AllowAnonymous]
     public async Task<IActionResult> AddUser([FromForm] AddUserCommand cmd) =>
         CityMallResult(await Mediator.Send(cmd));
 
@@ -69,6 +57,33 @@ public class UsersController : CityMallController
     /// <returns></returns>
     [HttpPatch(Router.User.RefreshjWT)]
     public async Task<IActionResult> RefreshjWT(RefreshjWTCommand cmd) =>
+        CityMallResult(await Mediator.Send(cmd));
+
+    /// <summary>
+    /// change password 
+    /// </summary>
+    /// <param name="cmd"></param>
+    /// <returns></returns>
+    [HttpPatch(Router.User.ChangePassword)]
+    public async Task<IActionResult> ChangePassword(ChangePasswordCommand cmd) =>
+        CityMallResult(await Mediator.Send(cmd));
+
+    /// <summary>
+    /// send reset password token
+    /// </summary>
+    /// <param name="cmd"></param>
+    /// <returns></returns>
+    [HttpPatch(Router.User.SendResetPasswordToken)]
+    public async Task<IActionResult> SendResetPasswordToken(SendResetPasswordTokenCommand cmd) =>
+        CityMallResult(await Mediator.Send(cmd));
+
+    /// <summary>
+    /// reset password
+    /// </summary>
+    /// <param name="cmd"></param>
+    /// <returns></returns>
+    [HttpPatch(Router.User.ResetPassword)]
+    public async Task<IActionResult> ResetPassword(ResetPasswordCommand cmd) =>
         CityMallResult(await Mediator.Send(cmd));
 
     /// <summary>

@@ -8,11 +8,11 @@ public sealed class UserJWT : BaseEntity
     public string UserId { get; set; }
 
     [Required]
-    [MaxLength(1500)]
+    [MaxLength(4000)]
     public string JWT { get; set; }
 
     [Required]
-    [MaxLength(1500)]
+    [MaxLength(4000)]
     public string RefreshJWT { get; set; }
 
     [Required]
@@ -39,6 +39,7 @@ public sealed class UserJWT : BaseEntity
     [AllowNull]
     [ForeignKey(nameof(UserId))]
     public User? User { get; set; }
+
     public UserJWT()
     {
         CreatedAt = DateTime.Now;

@@ -35,14 +35,12 @@ public sealed class AddUserDto
     public string Email { get; set; }
 
     [Phone]
-    [Required]
     [MaxLength(255)]
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 
     [Phone]
-    [Required]
     [MaxLength(255)]
-    public string WhatsAppNumber { get; set; }
+    public string? WhatsAppNumber { get; set; }
 
     public IFormFile? Image { get; set; }
 
