@@ -22,6 +22,10 @@ public sealed class Product : BaseEntity, ICreateableTracker, IDeleteableTracker
     [MinLength(255)]
     public string Name { get; set; }
 
+    [DataType(DataType.MultilineText)]
+    public string? Description { get; set; }
+
+
     [Required]
     public decimal UnitPrice { get; set; }
 

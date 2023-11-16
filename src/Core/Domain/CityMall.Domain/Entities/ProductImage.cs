@@ -13,6 +13,7 @@ public sealed class ProductImage : BaseEntity, ICreateableTracker, IDeleteableTr
 
     [Required]
     [MaxLength(1500)]
+    [DataType(DataType.ImageUrl)]
     public string ImageUri { get; set; }
 
     [Required]
