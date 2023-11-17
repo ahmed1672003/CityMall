@@ -25,8 +25,27 @@ public sealed class Product : BaseEntity, ICreateableTracker, IDeleteableTracker
     [DataType(DataType.MultilineText)]
     public string? Description { get; set; }
 
-    [Required]
-    public decimal UnitPrice { get; set; }
+    [Required] // سعر البيع
+    public decimal SellingUnitPrice { get; set; }
+
+    [Required] // سعر الشراء
+    public decimal PurchasingUnitPrice { get; set; }
+
+    [Required] // الضريبة المدفوعة بالنسبة المئوية
+    public decimal Tax { get; set; }
+
+    [NotMapped]
+    public decimal ProfitPrice
+    {
+        get
+        {
+            // تكلفة الضريبة من العدد الكلي
+            decimal totalTaxCost = ((PurchasingUnitPrice * QtyInStock) * Tax) / 100;
+            // التكلفة الكلية
+            decimal totalCost = (PurchasingUnitPrice * QtyInStock) + totalTaxCost;
+            return ((SellingUnitPrice * QtyInStock) - totalCost);
+        }
+    }
 
     [Required]
     public int QtyInStock { get; set; }

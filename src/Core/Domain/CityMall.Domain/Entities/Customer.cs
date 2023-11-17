@@ -15,12 +15,17 @@ public class Customer : BaseEntity, ICreateableTracker, IDeleteableTracker, IUpd
     [AllowNull]
     [MaxLength(25)]
     public string? SecondPhone { get; set; }
-    public List<Address> Addresses { get; set; }
     public Cart Cart { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
     public DateTime CreatedAt { get; set; }
-    public Customer() =>
+    public List<Address> Addresses { get; set; }
+    public List<Order> Orders { get; set; }
+
+    public Customer()
+    {
         Addresses = new(0);
+        Orders = new(0);
+    }
 }
