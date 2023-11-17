@@ -3,6 +3,9 @@
 [PrimaryKey(nameof(Id))]
 public sealed class Shipper : BaseEntity, ICreateableTracker, IDeleteableTracker, IUpdateableTracker
 {
+    [Required]
+    [MaxLength(64)]
+    [MinLength(64)]
     public string Id { get; set; }
     public string CompanyName { get; set; }
     public string CompanyPhone { get; set; }

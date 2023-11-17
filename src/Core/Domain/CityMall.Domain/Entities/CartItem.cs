@@ -14,14 +14,13 @@ public sealed class CartItem : BaseEntity, ICreateableTracker, IDeleteableTracke
     public string ProductId { get; set; }
 
     [Required]
-    public int PaiedQty { get; set; }
+    public int QtyCartItem { get; set; }
 
     [Required]
-    public decimal UnitPrice { get; set; }
+    public decimal SellingUnitPrice { get; set; }
 
     [Required]
     public DateTime CreatedAt { get; set; }
-
     public DateTime? UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
