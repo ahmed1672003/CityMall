@@ -16,7 +16,7 @@ public static class Router
         public const string RefreshjWT = UserPrefix + "refresh-jWT";
         public const string ConfirmeEmail = UserPrefix + "confirme-email";
         public const string ChangePassword = UserPrefix + "change-password";
-        public const string SendResetPasswordToken = UserPrefix + "send-reset-passwordtoken";
+        public const string SendResetPasswordToken = UserPrefix + "send-reset-password-token";
         public const string ResetPassword = UserPrefix + "reset-password";
         public const string GetAll = UserPrefix + "get-all";
         public const string GetAllUnDeleted = UserPrefix + "get-all-undeleted";

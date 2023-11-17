@@ -70,6 +70,20 @@ public static class InfrastructureDependencies
                .AddScoped<IUserRepository, UserRepository>()
                .AddScoped<IUserRoleMapperRepository, UserRoleMapperRepository>()
                .AddScoped<IUserTokenRepository, UserTokenRepository>()
+               .AddScoped<IAddressRepository, AddressRepository>()
+               .AddScoped<ICartRepository, CartRepository>()
+               .AddScoped<ICartItemRepository, CartItemRepository>()
+               .AddScoped<ICategoryRepository, CategoryRepository>()
+               .AddScoped<ICustomerRepository, CustomerRepository>()
+               .AddScoped<IOrderLineRepository, OrderLineRepository>()
+               .AddScoped<IOrderRepository, OrderRepository>()
+               .AddScoped<IProductAttributeMapperRepository, ProductAttributeMapperRepository>()
+               .AddScoped<IProductAttributeRepository, ProductAttributeRepository>()
+               .AddScoped<IProductImageRepository, ProductImageRepository>()
+               .AddScoped<IProductRepository, ProductRepository>()
+               .AddScoped<IShipperRepository, ShipperRepository>()
+               .AddScoped<IStockRepository, StockRepository>()
+               .AddScoped<ISubCategoryRepository, SubCategoryRepository>()
                .AddScoped(typeof(IRepository<>), typeof(Repository<>));
         #endregion
 

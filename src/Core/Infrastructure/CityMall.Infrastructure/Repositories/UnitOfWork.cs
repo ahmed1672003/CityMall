@@ -12,7 +12,21 @@ public sealed class UnitOfWork : IUnitOfWork
         IUserLoginRepository userLogins,
         IUserRoleMapperRepository userRoleMappers,
         IUserTokenRepository userTokens,
-        IUserRepository users)
+        IUserRepository users,
+        IAddressRepository addresses,
+        ICartItemRepository cartItems,
+        ICartRepository carts,
+        ICategoryRepository categories,
+        ICustomerRepository customers,
+        IOrderRepository orders,
+        IOrderLineRepository ordersLines,
+        IProductAttributeMapperRepository productAttributeMappers,
+        IProductAttributeRepository productAttributes,
+        IProductImageRepository productImages,
+        IProductRepository products,
+        IShipperRepository shippers,
+        IStockRepository stocks,
+        ISubCategoryRepository subCategories)
     {
         _context = context;
         Identity = identity;
@@ -24,6 +38,20 @@ public sealed class UnitOfWork : IUnitOfWork
         UserRoleMappers = userRoleMappers;
         UserTokens = userTokens;
         Users = users;
+        Addresses = addresses;
+        CartItems = cartItems;
+        Carts = carts;
+        Categories = categories;
+        Customers = customers;
+        Orders = orders;
+        OrdersLines = ordersLines;
+        ProductAttributeMappers = productAttributeMappers;
+        ProductAttributes = productAttributes;
+        ProductImages = productImages;
+        Products = products;
+        Shippers = shippers;
+        Stocks = stocks;
+        SubCategories = subCategories;
     }
 
     public IIdentityRepository Identity { get; }
@@ -35,6 +63,21 @@ public sealed class UnitOfWork : IUnitOfWork
     public IUserRoleMapperRepository UserRoleMappers { get; }
     public IUserTokenRepository UserTokens { get; }
     public IUserRepository Users { get; }
+    public IAddressRepository Addresses { get; }
+    public ICartItemRepository CartItems { get; }
+    public ICartRepository Carts { get; }
+    public ICategoryRepository Categories { get; }
+    public ICustomerRepository Customers { get; }
+    public IOrderRepository Orders { get; }
+    public IOrderLineRepository OrdersLines { get; }
+    public IProductAttributeMapperRepository ProductAttributeMappers { get; }
+    public IProductAttributeRepository ProductAttributes { get; }
+    public IProductImageRepository ProductImages { get; }
+    public IProductRepository Products { get; }
+    public IShipperRepository Shippers { get; }
+    public IStockRepository Stocks { get; }
+    public ISubCategoryRepository SubCategories { get; }
+
     public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default) =>
          await _context.Database.BeginTransactionAsync(cancellationToken);
 

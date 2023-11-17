@@ -6,13 +6,15 @@ public static class Tables
     public const string CartItems = "CartItems";
     public const string Categories = "Categories";
     public const string Customers = "Customers";
-    public const string Orders = "Orders";
     public const string Products = "Products";
     public const string ProductAttributes = "ProductAttributes";
     public const string ProductAttributeMappers = "ProductAttributeMappers";
     public const string ProductImages = "ProductImages";
     public const string Stocks = "Stocks";
     public const string SubCategories = "SubCategories";
+    public const string Orders = "Orders";
+    public const string OrderLines = "OrderLines";
+    public const string Shippers = "Shippers";
     public static class Identity
     {
         public const string Users = "Users";

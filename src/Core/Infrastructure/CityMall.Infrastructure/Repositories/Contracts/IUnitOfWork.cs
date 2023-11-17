@@ -10,6 +10,20 @@ public interface IUnitOfWork : IAsyncDisposable
     IUserLoginRepository UserLogins { get; }
     IUserRoleMapperRepository UserRoleMappers { get; }
     IUserTokenRepository UserTokens { get; }
+    IAddressRepository Addresses { get; }
+    ICartItemRepository CartItems { get; }
+    ICartRepository Carts { get; }
+    ICategoryRepository Categories { get; }
+    ICustomerRepository Customers { get; }
+    IOrderRepository Orders { get; }
+    IOrderLineRepository OrdersLines { get; }
+    IProductAttributeMapperRepository ProductAttributeMappers { get; }
+    IProductAttributeRepository ProductAttributes { get; }
+    IProductImageRepository ProductImages { get; }
+    IProductRepository Products { get; }
+    IShipperRepository Shippers { get; }
+    IStockRepository Stocks { get; }
+    ISubCategoryRepository SubCategories { get; }
     void UndoDeleted<T>(ref T entity) where T : IDeleteableTracker
     {
         entity.IsDeleted = false;

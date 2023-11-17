@@ -10,6 +10,22 @@ public interface ICityMallDbContext
     DbSet<UserRoleMapper> UserRoles { get; }
     DbSet<UserToken> UserTokens { get; }
     DbSet<UserJWT> UserJWTs { get; }
+
+    DbSet<Address> Addresses { get; }
+    DbSet<Cart> Carts { get; }
+    DbSet<CartItem> CartItems { get; }
+    DbSet<Category> Categories { get; }
+    DbSet<Customer> Customers { get; }
+    DbSet<Order> Orders { get; }
+    DbSet<OrderLine> OrderLines { get; }
+    DbSet<ProductAttribute> ProductAttributes { get; }
+    DbSet<ProductAttributeMapper> ProductAttributeMappers { get; }
+    DbSet<Product> Products { get; }
+    DbSet<ProductImage> ProductImages { get; }
+    DbSet<Shipper> Shippers { get; }
+    DbSet<Stock> Stocks { get; }
+    DbSet<SubCategory> SubCategories { get; }
+
     ValueTask DisposeAsync();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     DatabaseFacade Database { get; }
