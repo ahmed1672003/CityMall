@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CityMall.Infrastructure.Migrations
 {
     [DbContext(typeof(CityMallDbContext))]
-    [Migration("20231117022658_AddTables")]
-    partial class AddTables
+    [Migration("20231126092251_AlterColumns")]
+    partial class AlterColumns
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,8 @@ namespace CityMall.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -207,9 +209,17 @@ namespace CityMall.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CartId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Customers", (string)null);
                 });
@@ -298,9 +308,6 @@ namespace CityMall.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("nvarchar(64)");
-
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
@@ -372,8 +379,6 @@ namespace CityMall.Infrastructure.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
 
                     b.HasIndex("Email")
                         .IsUnique()
@@ -850,9 +855,13 @@ namespace CityMall.Infrastructure.Migrations
 
             modelBuilder.Entity("CityMall.Domain.Entities.Address", b =>
                 {
-                    b.HasOne("CityMall.Domain.Entities.Customer", null)
+                    b.HasOne("CityMall.Domain.Entities.Customer", "Customer")
                         .WithMany("Addresses")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("CityMall.Domain.Entities.Cart", b =>
@@ -887,7 +896,15 @@ namespace CityMall.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("CartId");
 
+                    b.HasOne("CityMall.Domain.Entities.Identity.User", "User")
+                        .WithOne("Customer")
+                        .HasForeignKey("CityMall.Domain.Entities.Customer", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Cart");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CityMall.Domain.Entities.Identity.RoleClaim", b =>
@@ -903,15 +920,6 @@ namespace CityMall.Infrastructure.Migrations
                         .HasForeignKey("RoleId1");
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("CityMall.Domain.Entities.Identity.User", b =>
-                {
-                    b.HasOne("CityMall.Domain.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("CityMall.Domain.Entities.Identity.UserClaim", b =>
@@ -1076,6 +1084,8 @@ namespace CityMall.Infrastructure.Migrations
 
             modelBuilder.Entity("CityMall.Domain.Entities.Identity.User", b =>
                 {
+                    b.Navigation("Customer");
+
                     b.Navigation("UserJWTs");
 
                     b.Navigation("UserRoles");

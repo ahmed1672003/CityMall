@@ -10,7 +10,6 @@ public interface ICityMallDbContext
     DbSet<UserRoleMapper> UserRoles { get; }
     DbSet<UserToken> UserTokens { get; }
     DbSet<UserJWT> UserJWTs { get; }
-
     DbSet<Address> Addresses { get; }
     DbSet<Cart> Carts { get; }
     DbSet<CartItem> CartItems { get; }
@@ -25,7 +24,6 @@ public interface ICityMallDbContext
     DbSet<Shipper> Shippers { get; }
     DbSet<Stock> Stocks { get; }
     DbSet<SubCategory> SubCategories { get; }
-
     ValueTask DisposeAsync();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     DatabaseFacade Database { get; }

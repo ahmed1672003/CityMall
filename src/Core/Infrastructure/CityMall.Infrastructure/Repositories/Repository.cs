@@ -12,7 +12,6 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
         _context = context;
         _entities = _context.Set<TEntity>();
     }
-
     #region Commands
     public virtual async Task CreateAsync(TEntity entity, CancellationToken cancellation = default)
     {
@@ -21,17 +20,22 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 
     public virtual async Task CreateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellation = default)
     {
-        await _entities.AddRangeAsync(entities, cancellation);
+        await _entities.BulkInsertOptimizedAsync(entities, options =>
+        {
+            options.AcceptAllChangesOnSuccess = true;
+        }, cancellation);
     }
     public virtual Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         _entities.Update(entity);
         return Task.CompletedTask;
     }
-    public virtual Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+    public virtual async Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
-        _entities.UpdateRange(entities);
-        return Task.CompletedTask;
+        await _entities.BulkUpdateAsync(entities, options =>
+        {
+            options.AcceptAllChangesOnSuccess = true;
+        }, cancellationToken);
     }
 
     public virtual Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)

@@ -1,4 +1,6 @@
-﻿using CityMall.Specifications.Specifications.Jwts;
+﻿using CityMall.Specifications.Specifications.Addresses;
+using CityMall.Specifications.Specifications.Customers;
+using CityMall.Specifications.Specifications.Jwts;
 using CityMall.Specifications.Specifications.Roles;
 
 namespace CityMall.Specifications.Specifications;
@@ -52,6 +54,28 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
         return type.Name switch
         {
             "AsNoTrackingGetAllRoleByRoleNamesSpecification" => new AsNoTrackingGetAllRoleByRoleNamesSpecification(parameters[0]),
+            _ => throw new InvalidOperationException()
+        };
+    }
+
+    public ISpecification<Address> CreateAddressSpecifications(Type type, params dynamic[] parameters)
+    {
+        return type.Name switch
+        {
+            "AsNoTrackingGetUnDeletedAddressByIdSpecification" => new AsNoTrackingGetUnDeletedAddressByIdSpecification(parameters[0]),
+            "AsTrackingGetUnDeletedAddressByIdSpecification" => new AsTrackingGetUnDeletedAddressByIdSpecification(parameters[0]),
+            _ => throw new InvalidOperationException()
+        };
+    }
+
+    public ISpecification<Customer> CreateCustomerSpecifications(Type type, params dynamic[] parameters)
+    {
+        return type.Name switch
+        {
+            "AsNoTrackingGetUnDeletedCustomerByIdSpecification" => new AsNoTrackingGetUnDeletedCustomerByIdSpecification(parameters[0]),
+            "AsNoTrackingGetAllUnDeletedCustomerSpecification" => new AsNoTrackingGetAllUnDeletedCustomerSpecification(),
+            "AsNoTrackingGetAllDeletedCustomerSpecification" => new AsNoTrackingGetAllDeletedCustomerSpecification(),
+            "AsNoTrackingGetAllCustomerSpecification" => new AsNoTrackingGetAllCustomerSpecification(),
             _ => throw new InvalidOperationException()
         };
     }

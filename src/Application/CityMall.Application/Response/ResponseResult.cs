@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace CityMall.Application.Response;
+﻿namespace CityMall.Application.Response;
 public sealed class ResponseResult
 {
     public static ResponseModel<TData> Success<TData>(TData data = null, object errors = null)

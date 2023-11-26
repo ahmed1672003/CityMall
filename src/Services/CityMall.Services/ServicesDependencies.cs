@@ -10,16 +10,26 @@ public static class ServicesDependencies
         services
             .AddHttpClient()
             .AddDistributedMemoryCache();
-
-        services.AddScoped<IUnitOfServices, UnitOfSevices>()
+        services
+                .AddScoped<IAddressService, AddressService>()
+                .AddScoped<ICustomerService, CustomerService>()
+                .AddScoped<ICartItemService, CartItemService>()
+                .AddScoped<ICartService, CartService>()
+                .AddScoped<ICategoryService, CategoryService>()
+                .AddScoped<ISubCategoryService, SubCategoryService>()
+                .AddScoped<IOrderService, OrderService>()
+                .AddScoped<IOrderLineService, OrderLineService>()
+                .AddScoped<IProductService, ProductService>()
+                .AddScoped<IProductImageService, ProductImageService>()
+                .AddScoped<IProductAttributeService, ProductAttributeService>()
+                .AddScoped<IShipperService, ShipperService>()
+                .AddScoped<IStockService, StockService>()
+                .AddScoped<IUnitOfServices, UnitOfSevices>()
                 .AddScoped<IAuthService, AuthService>()
                 .AddScoped<IEmailService, EmailService>()
-                .AddScoped<IFileService, FileService>()
-                .AddSingleton<ICacheService, CacheService>();
-
+                .AddScoped<IFileService, FileService>();
         services.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
         #endregion
-
         #region JWT Services
         services.AddAuthentication(options =>
         {
@@ -72,7 +82,6 @@ public static class ServicesDependencies
             });
         });
         #endregion
-
         return services;
     }
 }

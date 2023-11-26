@@ -47,7 +47,6 @@ public sealed class User : IdentityUser<string>, ICreateableTracker, IDeleteable
     public List<UserJWT> UserJWTs { get; set; }
     public List<UserRoleMapper> UserRoles { get; set; }
     public Customer Customer { get; set; }
-
     public User()
     {
         // 257EAEEEEA724D7EB50B8B41A4DDE0B6257EAEEEEA724D7EB50B8B41A4DDE0B6

@@ -6,31 +6,36 @@ public sealed class Address : BaseEntity, ICreateableTracker, IDeleteableTracker
     [Required]
     [MaxLength(64)]
     [MinLength(64)]
-    public string Id { get; set; }
+    public override string Id { get; set; }
 
     [Required]
-    [MinLength(255)]
+    [MaxLength(64)]
+    [MinLength(64)]
+    public string CustomerId { get; set; }
+
+    [Required]
+    [MinLength(3)]
     [MaxLength(255)]
     public string StreetName { get; set; }
 
     [Required]
-    [MinLength(255)]
+    [MinLength(3)]
     [MaxLength(255)]
     public string StreetNumber { get; set; }
 
     [Required]
-    [MinLength(255)]
+    [MinLength(3)]
     [MaxLength(255)]
     public string City { get; set; }
 
 
     [Required]
-    [MinLength(255)]
+    [MinLength(3)]
     [MaxLength(255)]
     public string Governorate { get; set; }
 
     [Required]
-    [MinLength(255)]
+    [MinLength(3)]
     [MaxLength(255)]
     public string Country { get; set; }
 
@@ -41,4 +46,7 @@ public sealed class Address : BaseEntity, ICreateableTracker, IDeleteableTracker
     public DateTime CreatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+
+    [ForeignKey(nameof(CustomerId))]
+    public Customer Customer { get; set; }
 }

@@ -9,21 +9,18 @@ public sealed class AuthService : IAuthService
     private readonly IUnitOfWork _context;
     private readonly ISpecificationsFactory _specificationsFactory;
     private readonly JwtSettings _jWTSettings;
-
     public AuthService(IUnitOfWork context, IOptions<JwtSettings> options, ISpecificationsFactory specificationsFactory)
     {
         _context = context;
         _jWTSettings = options.Value;
         _specificationsFactory = specificationsFactory;
     }
-
     /// <summary>
     /// Delegate which pointer at result of JWT Validation (Parameraters Validation) && (Algorithm Validation)
     /// </summary>
     public Func<string, JwtSecurityToken, Task<bool>> IsJWTValid
         => async (jwt, jwtSecurityToken) =>
         await IsJWTParametersValidAsync(jwt) && await IsJWTAlgorithmValidAsync(jwtSecurityToken);
-
 
     /// <summary>
     /// get JWT for specific user and if user does't have a jwt in data base, will get a new jwt after save in data base 

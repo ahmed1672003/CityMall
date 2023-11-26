@@ -26,6 +26,26 @@ public static class Router
         public const string PaginateAllDeleted = UserPrefix + "paginate-all-deleted";
     }
 
+    public static class Address
+    {
+        private const string AddressPrefix = ApiPrefix + "address/";
+        public const string AddAddress = AddressPrefix + "add";
+        public const string UpdateAddress = AddressPrefix + "update";
+        public const string DeleteAddress = AddressPrefix + "delete-byid";
+    }
+
+    public static class Customer
+    {
+        private const string CustomerPrefix = ApiPrefix + "customer/";
+        public const string AddCustomer = CustomerPrefix + "add";
+        public const string UpdateCustomer = CustomerPrefix + "update";
+        public const string DeleteCustomer = CustomerPrefix + "delete";
+        public const string GetAll = CustomerPrefix + "get-all";
+        public const string GetById = CustomerPrefix + "get-byid";
+        public const string GetAllUnDeleted = CustomerPrefix + "get-all-undeleted";
+        public const string GetAllDeleted = CustomerPrefix + "get-all-deleted";
+    }
+
     public static class Emails
     {
         private const string EmailPrefix = ApiPrefix + "emails";

@@ -67,7 +67,6 @@ public static class APIDependencies
             options.DescribeAllParametersInCamelCase();
             options.InferSecuritySchemes();
         });
-
         return services;
     }
 }

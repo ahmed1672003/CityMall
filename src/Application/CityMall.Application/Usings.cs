@@ -7,6 +7,7 @@ global using AutoMapper;
 global using CityMall.Application.Helpers;
 global using CityMall.Application.Response;
 global using CityMall.Domain.Entities.Identity;
+global using CityMall.Dtos.Dtos.Addresses;
 global using CityMall.Dtos.Dtos.Auth;
 global using CityMall.Dtos.Dtos.Emails;
 global using CityMall.Dtos.Dtos.Files;

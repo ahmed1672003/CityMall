@@ -6,7 +6,6 @@ public static class CacheKeys
         public const string Prefix = "users";
         public static Func<string, string> GetUserKey = (id) => $"{Prefix}-{id}";
     }
-
     public static class Jwt
     {
         public const string Prefix = "jwts";

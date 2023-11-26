@@ -1,4 +1,6 @@
-﻿namespace CityMall.Domain.Entities;
+﻿using CityMall.Domain.Entities.Identity;
+
+namespace CityMall.Domain.Entities;
 
 [PrimaryKey(nameof(Id))]
 public class Customer : BaseEntity, ICreateableTracker, IDeleteableTracker, IUpdateableTracker
@@ -6,7 +8,12 @@ public class Customer : BaseEntity, ICreateableTracker, IDeleteableTracker, IUpd
     [Required]
     [MaxLength(64)]
     [MinLength(64)]
-    public string Id { get; set; }
+    public override string Id { get; set; }
+
+    [Required]
+    [MaxLength(64)]
+    [MinLength(64)]
+    public string UserId { get; set; }
 
     [Required]
     [MaxLength(25)]
@@ -23,6 +30,8 @@ public class Customer : BaseEntity, ICreateableTracker, IDeleteableTracker, IUpd
     public List<Address> Addresses { get; set; }
     public List<Order> Orders { get; set; }
 
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; }
     public Customer()
     {
         Addresses = new(0);
