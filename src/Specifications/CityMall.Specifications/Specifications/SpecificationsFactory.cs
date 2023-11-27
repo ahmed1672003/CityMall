@@ -1,7 +1,10 @@
 ﻿using CityMall.Specifications.Specifications.Addresses;
+using CityMall.Specifications.Specifications.Categories;
 using CityMall.Specifications.Specifications.Customers;
 using CityMall.Specifications.Specifications.Jwts;
 using CityMall.Specifications.Specifications.Roles;
+using CityMall.Specifications.Specifications.Stocks;
+using CityMall.Specifications.Specifications.SubCategories;
 
 namespace CityMall.Specifications.Specifications;
 
@@ -57,7 +60,6 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
             _ => throw new InvalidOperationException()
         };
     }
-
     public ISpecification<Address> CreateAddressSpecifications(Type type, params dynamic[] parameters)
     {
         return type.Name switch
@@ -67,16 +69,49 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
             _ => throw new InvalidOperationException()
         };
     }
-
     public ISpecification<Customer> CreateCustomerSpecifications(Type type, params dynamic[] parameters)
     {
         return type.Name switch
         {
-            "AsNoTrackingGetUnDeletedCustomerByIdSpecification" => new AsNoTrackingGetUnDeletedCustomerByIdSpecification(parameters[0]),
+            "AsNoTrackingGetCustomerByIdSpecification" => new AsNoTrackingGetCustomerByIdSpecification(parameters[0]),
             "AsNoTrackingGetAllUnDeletedCustomerSpecification" => new AsNoTrackingGetAllUnDeletedCustomerSpecification(),
             "AsNoTrackingGetAllDeletedCustomerSpecification" => new AsNoTrackingGetAllDeletedCustomerSpecification(),
             "AsNoTrackingGetAllCustomerSpecification" => new AsNoTrackingGetAllCustomerSpecification(),
             _ => throw new InvalidOperationException()
+        };
+    }
+    public ISpecification<Stock> CreateStockSpecifications(Type type, params dynamic[] parameters)
+    {
+        return type.Name switch
+        {
+            "AsNoTrackingGetAllDeletedStocksSpecification" => new AsNoTrackingGetAllDeletedStocksSpecification(),
+            "AsNoTrackingGetAllStocksSpecification" => new AsNoTrackingGetAllStocksSpecification(),
+            "AsNoTrackingGetAllUnDeletedStocksSpecification" => new AsNoTrackingGetAllUnDeletedStocksSpecification(),
+            "AsNoTrackingGetStockByIdSpecification" => new AsNoTrackingGetStockByIdSpecification(parameters[0]),
+            _ => throw new InvalidOperationException()
+        };
+    }
+    public ISpecification<Category> CreateCategorySpecifications(Type type, params dynamic[] parameters)
+    {
+        return type.Name switch
+        {
+            "AsNoTrackingGetAllCategoriesSpecification" => new AsNoTrackingGetAllCategoriesSpecification(),
+            "AsNoTrackingGetAllDeletedCategoriesSpecification" => new AsNoTrackingGetAllDeletedCategoriesSpecification(),
+            "AsNoTrackingGetAllUnDeletedCategoriesSpecification" => new AsNoTrackingGetAllUnDeletedCategoriesSpecification(),
+            "AsNoTrackingGetCategoryByIdSpecification" => new AsNoTrackingGetCategoryByIdSpecification(parameters[0]),
+            _ => throw new InvalidOperationException(),
+        };
+    }
+
+    public ISpecification<SubCategory> CreateSubCategorySpecifications(Type type, params dynamic[] parameters)
+    {
+        return type.Name switch
+        {
+            "AsNoTrackingGetAllDeletedSubCategoriesSpecification" => new AsNoTrackingGetAllDeletedSubCategoriesSpecification(),
+            "AsNoTrackingGetAllSubCategoriesSpecification" => new AsNoTrackingGetAllSubCategoriesSpecification(),
+            "AsNoTrackingGetAllUnDeletedSubCategoriesSpecification" => new AsNoTrackingGetAllUnDeletedSubCategoriesSpecification(),
+            "AsNoTrackingGetSubCategoryByIdSpecification" => new AsNoTrackingGetSubCategoryByIdSpecification(parameters[0]),
+            _ => throw new InvalidOperationException(),
         };
     }
 }

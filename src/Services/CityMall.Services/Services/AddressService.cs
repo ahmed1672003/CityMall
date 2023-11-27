@@ -23,7 +23,7 @@ public sealed class AddressService : IAddressService
         }
         catch (Exception ex)
         {
-            throw new AddressCommandException("Error From AddressService.AddAddressAsync()", ex);
+            throw new AddressCommandException($"Error From {nameof(AddressService)}.{nameof(AddAsync)}", ex);
         }
     }
     public async Task UpdateAsync(UpdateAddressDto Dto, CancellationToken cancellationToken = default)
@@ -38,7 +38,7 @@ public sealed class AddressService : IAddressService
         }
         catch (Exception ex)
         {
-            throw new AddressCommandException("Error From AddressService.UpdateAddressAsync()", ex);
+            throw new AddressCommandException($"Error From {nameof(AddressService)}.{nameof(UpdateAsync)}", ex);
         }
     }
     public async Task DeleteByIdAsync(string id, CancellationToken cancellationToken = default)
@@ -52,7 +52,7 @@ public sealed class AddressService : IAddressService
         }
         catch (Exception ex)
         {
-            throw new AddressQueryException("Error From AddressService.DeleteAddressByIdAsync()", ex);
+            throw new AddressQueryException($"Error From {nameof(AddressService)}.{nameof(DeleteByIdAsync)}", ex);
         }
     }
     public async Task<bool> AnyAsync(CancellationToken cancellationToken = default) => await _context.Addresses.AnyAsync(cancellationToken: cancellationToken);
@@ -66,7 +66,7 @@ public sealed class AddressService : IAddressService
         }
         catch (Exception ex)
         {
-            throw new AddressQueryException("Error From AddressService.GetAllAsync()", ex);
+            throw new AddressQueryException($"Error From {nameof(AddressService)}.{nameof(GetAllAsync)}", ex);
         }
     }
     public async Task<IEnumerable<GetAddressDto>> GetAllAsync(ISpecification<Address> specification, CancellationToken cancellationToken = default)
@@ -77,7 +77,7 @@ public sealed class AddressService : IAddressService
         }
         catch (Exception ex)
         {
-            throw new AddressQueryException("Error From AddressService.GetAllAsync()", ex);
+            throw new AddressQueryException($"Error From  {nameof(AddressService)} . {nameof(AddAsync)}", ex);
         }
     }
 }

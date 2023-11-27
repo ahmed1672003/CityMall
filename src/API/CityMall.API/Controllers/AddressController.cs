@@ -4,8 +4,8 @@ using CityMall.Dtos.Dtos.Addresses;
 
 namespace CityMall.API.Controllers;
 
-[AllowAnonymous]
 [ApiController]
+[AllowAnonymous]
 public class AddressController : CityMallController
 {
     public AddressController(IMediator mediator) : base(mediator) { }

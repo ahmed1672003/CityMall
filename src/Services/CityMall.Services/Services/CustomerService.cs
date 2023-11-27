@@ -32,7 +32,7 @@ public sealed class CustomerService : ICustomerService
         try
         {
             ISpecification<Customer> asNoTrackingGetUnDeletedCustomerByIdSpec = _specificationsFactory
-                .CreateCustomerSpecifications(typeof(AsNoTrackingGetUnDeletedCustomerByIdSpecification), Dto.Id);
+                .CreateCustomerSpecifications(typeof(AsNoTrackingGetCustomerByIdSpecification), Dto.Id);
 
             Customer model = await _context.Customers.RetrieveAsync(asNoTrackingGetUnDeletedCustomerByIdSpec, cancellationToken);
             model = _mapper.Map<Customer>(Dto);
@@ -48,7 +48,7 @@ public sealed class CustomerService : ICustomerService
     {
         try
         {
-            ISpecification<Customer> asNoTrackingGetUnDeletedCustomerByIdSpec = _specificationsFactory.CreateCustomerSpecifications(typeof(AsNoTrackingGetUnDeletedCustomerByIdSpecification), id);
+            ISpecification<Customer> asNoTrackingGetUnDeletedCustomerByIdSpec = _specificationsFactory.CreateCustomerSpecifications(typeof(AsNoTrackingGetCustomerByIdSpecification), id);
             Customer model = await _context.Customers.RetrieveAsync(asNoTrackingGetUnDeletedCustomerByIdSpec, cancellationToken);
             await _context.Customers.DeleteAsync(model, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
@@ -62,7 +62,7 @@ public sealed class CustomerService : ICustomerService
         await _context.Customers.AnyAsync(cancellationToken: cancellationToken);
     public async Task<bool> AnyAsync(string id, CancellationToken cancellationToken = default)
     {
-        ISpecification<Customer> asNoTrackingGetUnDeletedCustomerByIdSpec = _specificationsFactory.CreateCustomerSpecifications(typeof(AsNoTrackingGetUnDeletedCustomerByIdSpecification), id);
+        ISpecification<Customer> asNoTrackingGetUnDeletedCustomerByIdSpec = _specificationsFactory.CreateCustomerSpecifications(typeof(AsNoTrackingGetCustomerByIdSpecification), id);
         return await _context.Customers.AnyAsync(asNoTrackingGetUnDeletedCustomerByIdSpec, cancellationToken);
     }
     public async Task<IEnumerable<GetCustomerDto>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -85,7 +85,7 @@ public sealed class CustomerService : ICustomerService
         try
         {
             ISpecification<Customer> asNoTrackingGetUnDeletedCustomerByIdSpec = _specificationsFactory
-                            .CreateCustomerSpecifications(typeof(AsNoTrackingGetUnDeletedCustomerByIdSpecification), id);
+                            .CreateCustomerSpecifications(typeof(AsNoTrackingGetCustomerByIdSpecification), id);
 
             return _mapper.Map<GetCustomerDto>
                 (await _context.Customers.RetrieveAsync(asNoTrackingGetUnDeletedCustomerByIdSpec, cancellationToken));

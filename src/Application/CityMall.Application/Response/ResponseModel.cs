@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace CityMall.Application.Response;
+﻿namespace CityMall.Application.Response;
 public class ResponseModel<TData>
 {
     public ResponseModel(
@@ -18,6 +16,5 @@ public class ResponseModel<TData>
     public bool IsSucceeded { get; set; }
     public string Message { get; set; }
     public object Errors { get; set; }
-    public object Meta { get; set; }
     public TData? Data { get; set; }
 }

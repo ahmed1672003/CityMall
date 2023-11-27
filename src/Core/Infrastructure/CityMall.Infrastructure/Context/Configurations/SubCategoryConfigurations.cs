@@ -4,5 +4,7 @@ public sealed class SubCategoryConfigurations : IEntityTypeConfiguration<SubCate
     public void Configure(EntityTypeBuilder<SubCategory> builder)
     {
         builder.ToTable(Tables.SubCategories);
+
+        builder.HasQueryFilter(sc => !sc.IsDeleted);
     }
 }

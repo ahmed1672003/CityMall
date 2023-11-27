@@ -3,8 +3,8 @@ using CityMall.Application.Features.Customers.Queries;
 
 namespace CityMall.API.Controllers;
 
-[AllowAnonymous]
 [ApiController]
+[AllowAnonymous]
 public class CustomerController : CityMallController
 {
     /// <summary>
@@ -38,8 +38,8 @@ public class CustomerController : CityMallController
     /// <param name="cmd"></param>
     /// <returns></returns>
     [HttpPatch(Router.Customer.DeleteCustomer)]
-    public async Task<IActionResult> DeleteCustomerAsync([Required] DeleteCustomerCommand cmd) =>
-        CityMallResult(await Mediator.Send(cmd));
+    public async Task<IActionResult> DeleteCustomerAsync([Required][MaxLength(64)][MinLength(64)] string customerId) =>
+        CityMallResult(await Mediator.Send(new DeleteCustomerCommand(customerId)));
 
 
     /// <summary>

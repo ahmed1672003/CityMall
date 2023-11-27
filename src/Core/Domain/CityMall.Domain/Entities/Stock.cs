@@ -6,7 +6,29 @@ public sealed class Stock : BaseEntity, ICreateableTracker, IDeleteableTracker, 
     [Required]
     [MaxLength(64)]
     [MinLength(64)]
-    public string Id { get; set; }
+    public sealed override string Id { get; set; }
+
+    [Required]
+    [MaxLength(255)]
+    [MinLength(3)]
+    public string Title { get; set; }
+
+
+    [Required]
+    [MaxLength(255)]
+    [MinLength(3)]
+    public string SereetName { get; set; }
+
+    [Required]
+    [MaxLength(255)]
+    [MinLength(3)]
+    public string City { get; set; }
+
+    [Required]
+    [MaxLength(255)]
+    [MinLength(3)]
+    public string Governorate { get; set; }
+
 
     [Required]
     public DateTime CreatedAt { get; set; }

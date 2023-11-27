@@ -1,14 +1,8 @@
 ﻿using CityMall.Application.Features.Email.Queries;
-using CityMall.Infrastructure.Constants;
-
-using MediatR;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CityMall.API.Controllers;
-[AllowAnonymous]
 [ApiController]
+[AllowAnonymous]
 public class EmailsController : CityMallController
 {
     public EmailsController(IMediator mediator) : base(mediator) { }

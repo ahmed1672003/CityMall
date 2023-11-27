@@ -46,9 +46,31 @@ public static class Router
         public const string GetAllDeleted = CustomerPrefix + "get-all-deleted";
     }
 
+    public static class Stocks
+    {
+        private const string StockPrefix = ApiPrefix + "stocks/";
+        public const string AddStock = StockPrefix + "add";
+        public const string UpdateStock = StockPrefix + "update";
+        public const string DeleteStockById = StockPrefix + "delete-byid";
+        public const string GetStockById = StockPrefix + "get-byid";
+        public const string GetAllStocks = StockPrefix + "get-all";
+        public const string GetAllUnDeletedStocks = StockPrefix + "get-all-undeleted";
+    }
+    public static class Categories
+    {
+        private const string CategoryPrefix = ApiPrefix + "categories/";
+        public const string AddCategory = CategoryPrefix + "add";
+        public const string UpdateCategory = CategoryPrefix + "update";
+        public const string DeleteCategoryById = CategoryPrefix + "delete-byid";
+        public const string GetCategoryById = CategoryPrefix + "get-byid";
+        public const string GetAllCategories = CategoryPrefix + "get-all";
+        public const string GetAllUnDeletedCategories = CategoryPrefix + "get-all-undeleted";
+        public const string GetAllDeletedCategories = CategoryPrefix + "get-all-deleted";
+    }
+
     public static class Emails
     {
-        private const string EmailPrefix = ApiPrefix + "emails";
+        private const string EmailPrefix = ApiPrefix + "emails/";
         public const string SendEmailsToAllUsers = EmailPrefix + "send-emails-to-all-users";
     }
 }

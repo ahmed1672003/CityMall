@@ -6,4 +6,7 @@ public interface ISpecificationsFactory
     ISpecification<Role> CreateRoleSpecifications(Type type, params dynamic[] parameters);
     ISpecification<Address> CreateAddressSpecifications(Type type, params dynamic[] parameters);
     ISpecification<Customer> CreateCustomerSpecifications(Type type, params dynamic[] parameters);
+    ISpecification<Stock> CreateStockSpecifications(Type type, params dynamic[] parameters);
+    ISpecification<Category> CreateCategorySpecifications(Type type, params dynamic[] parameters);
+    ISpecification<SubCategory> CreateSubCategorySpecifications(Type type, params dynamic[] parameters);
 }
