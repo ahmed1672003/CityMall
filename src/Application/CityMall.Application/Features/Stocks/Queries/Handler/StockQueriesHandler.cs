@@ -41,7 +41,7 @@ public sealed class StockQueriesHandler :
     {
         try
         {
-            if (!await _services.Stocks.AnyAsync(request.Id, cancellationToken))
+            if (!await _services.Stocks.AnyByIdAsync(request.Id, cancellationToken))
                 return ResponseResult.NotFound<GetStockDto>();
 
             return ResponseResult.Success(await _services.Stocks.GetByIdAsync(request.Id, cancellationToken));

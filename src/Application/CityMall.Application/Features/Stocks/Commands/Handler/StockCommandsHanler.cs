@@ -31,7 +31,7 @@ public sealed class StockCommandsHanler
     {
         try
         {
-            if (!await _services.Stocks.AnyAsync(request.Dto.Id))
+            if (!await _services.Stocks.AnyByIdAsync(request.Dto.Id))
                 return ResponseResult.NotFound<string>();
 
             await _services.Stocks.UpdateAsync(request.Dto, cancellationToken);
@@ -47,7 +47,7 @@ public sealed class StockCommandsHanler
     {
         try
         {
-            if (!await _services.Stocks.AnyAsync(request.Id))
+            if (!await _services.Stocks.AnyByIdAsync(request.Id))
                 return ResponseResult.NotFound<string>();
 
             await _services.Stocks.DeleteByIdAsync(request.Id, cancellationToken);

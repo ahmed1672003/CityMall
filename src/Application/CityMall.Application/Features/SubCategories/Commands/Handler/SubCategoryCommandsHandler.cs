@@ -25,7 +25,7 @@ public sealed class SubCategoryCommandsHandler :
     {
         try
         {
-            if (!await _services.SubCategories.AnyAsync(request.Dto.Id))
+            if (!await _services.SubCategories.AnyByIdAsync(request.Dto.Id))
                 return ResponseResult.NotFound<string>();
             await _services.SubCategories.UpdateAsync(request.Dto);
 
@@ -40,7 +40,7 @@ public sealed class SubCategoryCommandsHandler :
     {
         try
         {
-            if (!await _services.SubCategories.AnyAsync(request.Id))
+            if (!await _services.SubCategories.AnyByIdAsync(request.Id))
                 return ResponseResult.NotFound<string>();
 
             await _services.SubCategories.DeleteByIdAsync(request.Id);

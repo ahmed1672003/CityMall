@@ -10,5 +10,5 @@ public interface IStockService
     Task<IEnumerable<GetStockDto>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<GetStockDto>> GetAllUnDeletedAsync(CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(CancellationToken cancellationToken = default);
-    Task<bool> AnyAsync(string id, CancellationToken cancellationToken = default);
+    Task<bool> AnyByIdAsync(string id, CancellationToken cancellationToken = default);
 }

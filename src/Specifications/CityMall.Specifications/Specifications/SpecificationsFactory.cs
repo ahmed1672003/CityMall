@@ -1,12 +1,4 @@
-﻿using CityMall.Specifications.Specifications.Addresses;
-using CityMall.Specifications.Specifications.Categories;
-using CityMall.Specifications.Specifications.Customers;
-using CityMall.Specifications.Specifications.Jwts;
-using CityMall.Specifications.Specifications.Roles;
-using CityMall.Specifications.Specifications.Stocks;
-using CityMall.Specifications.Specifications.SubCategories;
-
-namespace CityMall.Specifications.Specifications;
+﻿namespace CityMall.Specifications.Specifications;
 
 public sealed class SpecificationsFactory : ISpecificationsFactory
 {
@@ -73,7 +65,7 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
     {
         return type.Name switch
         {
-            "AsNoTrackingGetCustomerByIdSpecification" => new AsNoTrackingGetCustomerByIdSpecification(parameters[0]),
+            "AsNoTrackingGetUnDeletedCustomerByIdSpecification" => new AsNoTrackingGetUnDeletedCustomerByIdSpecification(parameters[0]),
             "AsNoTrackingGetAllUnDeletedCustomerSpecification" => new AsNoTrackingGetAllUnDeletedCustomerSpecification(),
             "AsNoTrackingGetAllDeletedCustomerSpecification" => new AsNoTrackingGetAllDeletedCustomerSpecification(),
             "AsNoTrackingGetAllCustomerSpecification" => new AsNoTrackingGetAllCustomerSpecification(),
@@ -87,7 +79,7 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
             "AsNoTrackingGetAllDeletedStocksSpecification" => new AsNoTrackingGetAllDeletedStocksSpecification(),
             "AsNoTrackingGetAllStocksSpecification" => new AsNoTrackingGetAllStocksSpecification(),
             "AsNoTrackingGetAllUnDeletedStocksSpecification" => new AsNoTrackingGetAllUnDeletedStocksSpecification(),
-            "AsNoTrackingGetStockByIdSpecification" => new AsNoTrackingGetStockByIdSpecification(parameters[0]),
+            "AsNoTrackingGetUnDeletedStockByIdSpecification" => new AsNoTrackingGetUnDeletedStockByIdSpecification(parameters[0]),
             _ => throw new InvalidOperationException()
         };
     }
@@ -98,11 +90,10 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
             "AsNoTrackingGetAllCategoriesSpecification" => new AsNoTrackingGetAllCategoriesSpecification(),
             "AsNoTrackingGetAllDeletedCategoriesSpecification" => new AsNoTrackingGetAllDeletedCategoriesSpecification(),
             "AsNoTrackingGetAllUnDeletedCategoriesSpecification" => new AsNoTrackingGetAllUnDeletedCategoriesSpecification(),
-            "AsNoTrackingGetCategoryByIdSpecification" => new AsNoTrackingGetCategoryByIdSpecification(parameters[0]),
+            "AsNoTrackingGetUnDeletedCategoryByIdSpecification" => new AsNoTrackingGetUnDeletedCategoryByIdSpecification(parameters[0]),
             _ => throw new InvalidOperationException(),
         };
     }
-
     public ISpecification<SubCategory> CreateSubCategorySpecifications(Type type, params dynamic[] parameters)
     {
         return type.Name switch
@@ -110,8 +101,25 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
             "AsNoTrackingGetAllDeletedSubCategoriesSpecification" => new AsNoTrackingGetAllDeletedSubCategoriesSpecification(),
             "AsNoTrackingGetAllSubCategoriesSpecification" => new AsNoTrackingGetAllSubCategoriesSpecification(),
             "AsNoTrackingGetAllUnDeletedSubCategoriesSpecification" => new AsNoTrackingGetAllUnDeletedSubCategoriesSpecification(),
-            "AsNoTrackingGetSubCategoryByIdSpecification" => new AsNoTrackingGetSubCategoryByIdSpecification(parameters[0]),
+            "AsNoTrackingGetUnDeletedSubCategoryByIdSpecification" => new AsNoTrackingGetUnDeletedSubCategoryByIdSpecification(parameters[0]),
             _ => throw new InvalidOperationException(),
+        };
+    }
+    public ISpecification<Product> CreateProductSpecifications(Type type, params dynamic[] parameters)
+    {
+        return type.Name switch
+        {
+            "AsNoTrackingGetAllDeletedProductsSpecification" => new AsNoTrackingGetAllDeletedProductsSpecification(),
+            "AsNoTrackingGetAllProductsSpecification" => new AsNoTrackingGetAllProductsSpecification(),
+            "AsNoTrackingGetAllUnDeletedProductsSpecification" => new AsNoTrackingGetAllUnDeletedProductsSpecification(),
+            "AsNoTrackingGetDeletedProductBySKUSpecification" => new AsNoTrackingGetDeletedProductBySKUSpecification(parameters[0]),
+            "AsNoTrackingGetProductBySKUSpecification" => new AsNoTrackingGetProductBySKUSpecification(parameters[0]),
+            "AsNoTrackingGetUnDeletedProductByIdSpecification" => new AsNoTrackingGetUnDeletedProductByIdSpecification(parameters[0]),
+            "AsNoTrackingGetUnDeletedProductBySKUSpecification" => new AsNoTrackingGetUnDeletedProductBySKUSpecification(parameters[0]),
+            "AsNoTrackingCheckDeletedDuplicatedProductBySKUSpecification" => new AsNoTrackingCheckDeletedDuplicatedProductBySKUSpecification(parameters[0], parameters[1]),
+            "AsNoTrackingCheckUnDeletedDuplicatedProductBySKUSpecification" => new AsNoTrackingCheckUnDeletedDuplicatedProductBySKUSpecification(parameters[0], parameters[1]),
+            "AsNoTrackingCheckDuplicatedProductBySKUSpecification" => new AsNoTrackingCheckDuplicatedProductBySKUSpecification(parameters[0], parameters[1]),
+            _ => throw new InvalidOperationException()
         };
     }
 }

@@ -18,7 +18,7 @@ public sealed class SubCategoryQueriesHandler :
     {
         try
         {
-            if (!await _services.SubCategories.AnyAsync(request.Id, cancellationToken))
+            if (!await _services.SubCategories.AnyByIdAsync(request.Id, cancellationToken))
                 return ResponseResult.NotFound<GetSubCategoryDto>();
             return ResponseResult.Success(await _services.SubCategories.GetByIdAsync(request.Id, cancellationToken));
         }

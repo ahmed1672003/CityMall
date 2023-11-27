@@ -33,7 +33,7 @@ public sealed class CategoryService : ICategoryService
         try
         {
             ISpecification<Category> asNoTrackingGetCategoryByIdSpec = _specificationsFactory
-                                        .CreateCategorySpecifications(typeof(AsNoTrackingGetCategoryByIdSpecification), Dto.Id);
+                                        .CreateCategorySpecifications(typeof(AsNoTrackingGetUnDeletedCategoryByIdSpecification), Dto.Id);
             Category model = await _context.Categories.RetrieveAsync(asNoTrackingGetCategoryByIdSpec, cancellationToken);
             model = _mapper.Map<Category>(Dto);
             await _context.Categories.UpdateAsync(model, cancellationToken);
@@ -49,7 +49,7 @@ public sealed class CategoryService : ICategoryService
         try
         {
             ISpecification<Category> asNoTrackingGetCategoryByIdSpec = _specificationsFactory
-                                        .CreateCategorySpecifications(typeof(AsNoTrackingGetCategoryByIdSpecification), id);
+                                        .CreateCategorySpecifications(typeof(AsNoTrackingGetUnDeletedCategoryByIdSpecification), id);
 
             Category model = await _context.Categories.RetrieveAsync(asNoTrackingGetCategoryByIdSpec, cancellationToken);
             await _context.Categories.DeleteAsync(model, cancellationToken);
@@ -65,7 +65,7 @@ public sealed class CategoryService : ICategoryService
         try
         {
             ISpecification<Category> asNoTrackingGetCategoryByIdSpec = _specificationsFactory
-                                      .CreateCategorySpecifications(typeof(AsNoTrackingGetCategoryByIdSpecification), id);
+                                      .CreateCategorySpecifications(typeof(AsNoTrackingGetUnDeletedCategoryByIdSpecification), id);
             return _mapper.Map<GetCategoryDto>(await _context.Categories.RetrieveAsync(asNoTrackingGetCategoryByIdSpec, cancellationToken));
         }
         catch (Exception ex)
@@ -115,9 +115,9 @@ public sealed class CategoryService : ICategoryService
         }
     }
     public async Task<bool> AnyAsync(CancellationToken cancellationToken = default) => await _context.Categories.AnyAsync(cancellationToken: cancellationToken);
-    public async Task<bool> AnyAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<bool> AnyByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        ISpecification<Category> asNoTrackingGetCategoryByIdSpec = _specificationsFactory.CreateCategorySpecifications(typeof(AsNoTrackingGetCategoryByIdSpecification), id);
+        ISpecification<Category> asNoTrackingGetCategoryByIdSpec = _specificationsFactory.CreateCategorySpecifications(typeof(AsNoTrackingGetUnDeletedCategoryByIdSpecification), id);
 
         return await _context.Categories.AnyAsync(asNoTrackingGetCategoryByIdSpec, cancellationToken);
     }

@@ -11,5 +11,5 @@ public interface ISubCategoryService
     Task<IEnumerable<GetSubCategoryDto>> GetAllDeletedAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<GetSubCategoryDto>> GetAllUnDeletedAsync(CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(CancellationToken cancellationToken = default);
-    Task<bool> AnyAsync(string id, CancellationToken cancellationToken = default);
+    Task<bool> AnyByIdAsync(string id, CancellationToken cancellationToken = default);
 }

@@ -34,7 +34,7 @@ public sealed class StockService : IStockService
         try
         {
             ISpecification<Stock> asNoTrackingGetStockByIdSpec = _specificationsFactory
-                        .CreateStockSpecifications(typeof(AsNoTrackingGetStockByIdSpecification), Dto.Id);
+                        .CreateStockSpecifications(typeof(AsNoTrackingGetUnDeletedStockByIdSpecification), Dto.Id);
 
             Stock model = await _context.Stocks.RetrieveAsync(asNoTrackingGetStockByIdSpec, cancellationToken);
 
@@ -53,7 +53,7 @@ public sealed class StockService : IStockService
         try
         {
             ISpecification<Stock> asNoTrackingGetStockByIdSpec = _specificationsFactory
-                       .CreateStockSpecifications(typeof(AsNoTrackingGetStockByIdSpecification), id);
+                       .CreateStockSpecifications(typeof(AsNoTrackingGetUnDeletedStockByIdSpecification), id);
             Stock model = await _context.Stocks.RetrieveAsync(asNoTrackingGetStockByIdSpec, cancellationToken);
             await _context.Stocks.DeleteAsync(model, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
@@ -69,7 +69,7 @@ public sealed class StockService : IStockService
         try
         {
             ISpecification<Stock> asNoTrackingGetStockByIdSpec = _specificationsFactory
-                      .CreateStockSpecifications(typeof(AsNoTrackingGetStockByIdSpecification), id);
+                      .CreateStockSpecifications(typeof(AsNoTrackingGetUnDeletedStockByIdSpecification), id);
             return _mapper.Map<GetStockDto>(await _context.Stocks.RetrieveAsync(asNoTrackingGetStockByIdSpec, cancellationToken));
         }
         catch (Exception ex)
@@ -109,10 +109,10 @@ public sealed class StockService : IStockService
 
     public async Task<bool> AnyAsync(CancellationToken cancellationToken = default) => await _context.Stocks.AnyAsync(cancellationToken: cancellationToken);
 
-    public async Task<bool> AnyAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<bool> AnyByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         ISpecification<Stock> asNoTrackingGetStockByIdSpec = _specificationsFactory
-                    .CreateStockSpecifications(typeof(AsNoTrackingGetStockByIdSpecification), id);
+                    .CreateStockSpecifications(typeof(AsNoTrackingGetUnDeletedStockByIdSpecification), id);
 
         return await _context.Stocks.AnyAsync(asNoTrackingGetStockByIdSpec, cancellationToken);
     }

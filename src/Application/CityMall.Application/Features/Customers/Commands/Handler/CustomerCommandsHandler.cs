@@ -27,7 +27,7 @@ public sealed class CustomerCommandsHandler
     {
         try
         {
-            if (!await _services.Customers.AnyAsync(request.Dto.Id, cancellationToken))
+            if (!await _services.Customers.AnyByIdAsync(request.Dto.Id, cancellationToken))
                 return ResponseResult.NotFound<string>();
 
             await _services.Customers.UpdateAsync(request.Dto, cancellationToken);
@@ -43,7 +43,7 @@ public sealed class CustomerCommandsHandler
     {
         try
         {
-            if (!await _services.Customers.AnyAsync(request.Id, cancellationToken))
+            if (!await _services.Customers.AnyByIdAsync(request.Id, cancellationToken))
                 return ResponseResult.NotFound<string>();
 
             await _services.Customers.DeleteByIdAsync(request.Id, cancellationToken);

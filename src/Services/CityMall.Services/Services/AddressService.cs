@@ -56,8 +56,13 @@ public sealed class AddressService : IAddressService
         }
     }
     public async Task<bool> AnyAsync(CancellationToken cancellationToken = default) => await _context.Addresses.AnyAsync(cancellationToken: cancellationToken);
-    public async Task<bool> AnyAsync(ISpecification<Address> specification, CancellationToken cancellationToken = default) =>
-        await _context.Addresses.AnyAsync(specification, cancellationToken);
+    public async Task<bool> AnyByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        ISpecification<Address> asNoTrackingGetUnDeletedAddressByIdSpec = _specificationsFactory
+                            .CreateAddressSpecifications(typeof(AsNoTrackingGetUnDeletedAddressByIdSpecification), id);
+
+        return await _context.Addresses.AnyAsync(asNoTrackingGetUnDeletedAddressByIdSpec, cancellationToken);
+    }
     public async Task<IEnumerable<GetAddressDto>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         try

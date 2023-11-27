@@ -25,7 +25,6 @@ public static class Router
         public const string PaginateAllUnDeleted = UserPrefix + "paginate-all-undeleted";
         public const string PaginateAllDeleted = UserPrefix + "paginate-all-deleted";
     }
-
     public static class Address
     {
         private const string AddressPrefix = ApiPrefix + "address/";
@@ -33,7 +32,6 @@ public static class Router
         public const string UpdateAddress = AddressPrefix + "update";
         public const string DeleteAddress = AddressPrefix + "delete-byid";
     }
-
     public static class Customer
     {
         private const string CustomerPrefix = ApiPrefix + "customer/";
@@ -45,7 +43,6 @@ public static class Router
         public const string GetAllUnDeleted = CustomerPrefix + "get-all-undeleted";
         public const string GetAllDeleted = CustomerPrefix + "get-all-deleted";
     }
-
     public static class Stocks
     {
         private const string StockPrefix = ApiPrefix + "stocks/";
@@ -67,13 +64,11 @@ public static class Router
         public const string GetAllUnDeletedCategories = CategoryPrefix + "get-all-undeleted";
         public const string GetAllDeletedCategories = CategoryPrefix + "get-all-deleted";
     }
-
     public static class Emails
     {
         private const string EmailPrefix = ApiPrefix + "emails/";
         public const string SendEmailsToAllUsers = EmailPrefix + "send-emails-to-all-users";
     }
-
     public static class SubCategories
     {
         private const string SubCategoryPrefix = ApiPrefix + "subcategories/";
@@ -84,5 +79,16 @@ public static class Router
         public const string GetAllSubCategories = SubCategoryPrefix + "get-all";
         public const string GetAllUnDeletedSubCategories = SubCategoryPrefix + "get-all-undeleted";
         public const string GetAllDeletedSubCategories = SubCategoryPrefix + "get-all-deleted";
+    }
+    public static class Products
+    {
+        private const string ProductPrefix = ApiPrefix + "Products/";
+        public const string AddProduct = ProductPrefix + "add";
+        public const string UpdateProduct = ProductPrefix + "update";
+        public const string DeleteProductById = ProductPrefix + "delete-byid";
+        public const string GetProductById = ProductPrefix + "get-byid";
+        public const string GetAllProducts = ProductPrefix + "get-all";
+        public const string GetAllUnDeletedProducts = ProductPrefix + "get-all-undeleted";
+        public const string GetAllDeletedProducts = ProductPrefix + "get-all-deleted";
     }
 }

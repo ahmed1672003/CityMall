@@ -7,7 +7,7 @@ public interface ICustomerService
     Task UpdateAsync(UpdateCustomerDto Dto, CancellationToken cancellationToken = default);
     Task DeleteByIdAsync(string id, CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(CancellationToken cancellationToken = default);
-    Task<bool> AnyAsync(string id, CancellationToken cancellationToken = default);
+    Task<bool> AnyByIdAsync(string id, CancellationToken cancellationToken = default);
     Task<GetCustomerDto> GetByIdAsync(string id, CancellationToken cancellationToken = default);
     Task<IEnumerable<GetCustomerDto>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<GetCustomerDto>> GetAllUnDeltedAsync(CancellationToken cancellationToken = default);

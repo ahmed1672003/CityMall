@@ -11,6 +11,6 @@ public interface ICategoryService
     Task<IEnumerable<GetCategoryDto>> GetAllUnDeletedAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<GetCategoryDto>> GetAllDeletedAsync(CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(CancellationToken cancellationToken = default);
-    Task<bool> AnyAsync(string id, CancellationToken cancellationToken = default);
+    Task<bool> AnyByIdAsync(string id, CancellationToken cancellationToken = default);
 
 }

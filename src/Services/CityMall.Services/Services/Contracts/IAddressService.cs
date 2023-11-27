@@ -7,5 +7,5 @@ public interface IAddressService
     Task<IEnumerable<GetAddressDto>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<GetAddressDto>> GetAllAsync(ISpecification<Address> specification, CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(CancellationToken cancellationToken = default);
-    Task<bool> AnyAsync(ISpecification<Address> specification, CancellationToken cancellationToken = default);
+    Task<bool> AnyByIdAsync(string id, CancellationToken cancellationToken = default);
 }

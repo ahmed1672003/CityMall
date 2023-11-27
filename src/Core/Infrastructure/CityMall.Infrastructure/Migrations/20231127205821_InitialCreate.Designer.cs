@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CityMall.Infrastructure.Migrations
 {
     [DbContext(typeof(CityMallDbContext))]
-    [Migration("20231126231105_AlterStocks")]
-    partial class AlterStocks
+    [Migration("20231127205821_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -661,15 +661,25 @@ namespace CityMall.Infrastructure.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("SubCategoryId")
+                        .IsRequired()
+                        .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("UnitName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SKU")
+                        .IsUnique();
 
                     b.HasIndex("StockId");
 
@@ -759,10 +769,17 @@ namespace CityMall.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages", (string)null);
                 });
@@ -852,6 +869,8 @@ namespace CityMall.Infrastructure.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("CategoryId")
+                        .IsRequired()
+                        .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -862,6 +881,11 @@ namespace CityMall.Infrastructure.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -1045,11 +1069,15 @@ namespace CityMall.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CityMall.Domain.Entities.SubCategory", null)
+                    b.HasOne("CityMall.Domain.Entities.SubCategory", "SubCategory")
                         .WithMany("Products")
-                        .HasForeignKey("SubCategoryId");
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Stock");
+
+                    b.Navigation("SubCategory");
                 });
 
             modelBuilder.Entity("CityMall.Domain.Entities.ProductAttributeMapper", b =>
@@ -1071,11 +1099,26 @@ namespace CityMall.Infrastructure.Migrations
                     b.Navigation("ProductAttribute");
                 });
 
+            modelBuilder.Entity("CityMall.Domain.Entities.ProductImage", b =>
+                {
+                    b.HasOne("CityMall.Domain.Entities.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("CityMall.Domain.Entities.SubCategory", b =>
                 {
-                    b.HasOne("CityMall.Domain.Entities.Category", null)
+                    b.HasOne("CityMall.Domain.Entities.Category", "Category")
                         .WithMany("SubCatories")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("CityMall.Domain.Entities.Cart", b =>
@@ -1121,6 +1164,8 @@ namespace CityMall.Infrastructure.Migrations
                     b.Navigation("CartItems");
 
                     b.Navigation("ProductAttributeMappers");
+
+                    b.Navigation("ProductImages");
                 });
 
             modelBuilder.Entity("CityMall.Domain.Entities.ProductAttribute", b =>

@@ -17,7 +17,7 @@ public sealed class CategoryQueriesHandler :
     {
         try
         {
-            if (!await _services.Categories.AnyAsync(request.Id, cancellationToken))
+            if (!await _services.Categories.AnyByIdAsync(request.Id, cancellationToken))
                 return ResponseResult.NotFound<GetCategoryDto>();
 
             return ResponseResult.Success(await _services.Categories.GetByIdAsync(request.Id));

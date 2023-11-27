@@ -28,7 +28,7 @@ public sealed class CategoryCaommandsHandler :
     {
         try
         {
-            if (!await _services.Categories.AnyAsync(request.Dto.Id, cancellationToken))
+            if (!await _services.Categories.AnyByIdAsync(request.Dto.Id, cancellationToken))
                 return ResponseResult.NotFound<string>();
 
             await _services.Categories.UpdateAsync(request.Dto, cancellationToken);
@@ -44,7 +44,7 @@ public sealed class CategoryCaommandsHandler :
     {
         try
         {
-            if (!await _services.Categories.AnyAsync(request.Id, cancellationToken))
+            if (!await _services.Categories.AnyByIdAsync(request.Id, cancellationToken))
                 return ResponseResult.NotFound<string>();
             await _services.Categories.DeleteByIdAsync(request.Id, cancellationToken);
             return ResponseResult.Success<string>();

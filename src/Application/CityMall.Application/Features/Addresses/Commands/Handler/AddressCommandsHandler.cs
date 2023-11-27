@@ -1,8 +1,4 @@
-﻿
-using CityMall.Domain.Entities;
-using CityMall.Specifications.Specifications.Addresses;
-
-namespace CityMall.Application.Features.Addresses.Commands.Handler;
+﻿namespace CityMall.Application.Features.Addresses.Commands.Handler;
 public sealed class AddressCommandsHandler :
     IRequestHandler<AddAddressCommand, ResponseModel<string>>,
     IRequestHandler<UpdateAddressCommand, ResponseModel<string>>,
@@ -41,9 +37,8 @@ public sealed class AddressCommandsHandler :
     {
         try
         {
-            ISpecification<Address> asNoTrackingGetUnDeletedAddressByIdSpec = _specificationsFactory.CreateAddressSpecifications(typeof(AsNoTrackingGetUnDeletedAddressByIdSpecification), request.Dto.Id);
 
-            if (!await _services.Addresses.AnyAsync(asNoTrackingGetUnDeletedAddressByIdSpec, cancellationToken))
+            if (!await _services.Addresses.AnyByIdAsync(request.Dto.Id, cancellationToken))
                 return ResponseResult.NotFound<string>();
 
             await _services.Addresses.UpdateAsync(request.Dto, cancellationToken);
@@ -62,9 +57,7 @@ public sealed class AddressCommandsHandler :
     {
         try
         {
-            ISpecification<Address> asNoTrackingGetUnDeletedAddressByIdSpec = _specificationsFactory.CreateAddressSpecifications(typeof(AsNoTrackingGetUnDeletedAddressByIdSpecification), request.Id);
-
-            if (!await _services.Addresses.AnyAsync(asNoTrackingGetUnDeletedAddressByIdSpec, cancellationToken))
+            if (!await _services.Addresses.AnyByIdAsync(request.Id, cancellationToken))
                 return ResponseResult.NotFound<string>();
 
             await _services.Addresses.DeleteByIdAsync(request.Id);

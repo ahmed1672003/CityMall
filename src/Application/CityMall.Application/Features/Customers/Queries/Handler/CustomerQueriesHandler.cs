@@ -18,7 +18,7 @@ public sealed class CustomerQueriesHandler
     {
         try
         {
-            if (!await _services.Customers.AnyAsync(request.Id, cancellationToken))
+            if (!await _services.Customers.AnyByIdAsync(request.Id, cancellationToken))
                 return ResponseResult.NotFound<GetCustomerDto>();
             GetCustomerDto Dto = await _services.Customers.GetByIdAsync(request.Id, cancellationToken);
             return ResponseResult.Success(Dto);

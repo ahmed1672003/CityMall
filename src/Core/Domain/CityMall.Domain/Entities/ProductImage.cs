@@ -8,6 +8,11 @@ public sealed class ProductImage : BaseEntity, ICreateableTracker, IDeleteableTr
     public string Id { get; set; }
 
     [Required]
+    [MaxLength(64)]
+    [MinLength(64)]
+    public string ProductId { get; set; }
+
+    [Required]
     [MaxLength(255)]
     public string FileName { get; set; }
 
@@ -27,4 +32,7 @@ public sealed class ProductImage : BaseEntity, ICreateableTracker, IDeleteableTr
     public DateTime? UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
+
+    [ForeignKey(nameof(ProductId))]
+    public Product Product { get; set; }
 }

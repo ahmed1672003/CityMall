@@ -31,7 +31,7 @@ public sealed class SubCategoryService : ISubCategoryService
         try
         {
             ISpecification<SubCategory> asNoTrackingGetSubCategoryByIdSpec = _specificationsFactory
-                            .CreateSubCategorySpecifications(typeof(AsNoTrackingGetSubCategoryByIdSpecification), id);
+                            .CreateSubCategorySpecifications(typeof(AsNoTrackingGetUnDeletedSubCategoryByIdSpecification), id);
 
             SubCategory model = await _context.SubCategories.RetrieveAsync(asNoTrackingGetSubCategoryByIdSpec, cancellationToken);
             await _context.SubCategories.DeleteAsync(model, cancellationToken);
@@ -47,7 +47,7 @@ public sealed class SubCategoryService : ISubCategoryService
         try
         {
             ISpecification<SubCategory> asNoTrackingGetSubCategoryByIdSpec = _specificationsFactory
-                                .CreateSubCategorySpecifications(typeof(AsNoTrackingGetSubCategoryByIdSpecification), Dto.Id);
+                                .CreateSubCategorySpecifications(typeof(AsNoTrackingGetUnDeletedSubCategoryByIdSpecification), Dto.Id);
             SubCategory model = await _context.SubCategories.RetrieveAsync(asNoTrackingGetSubCategoryByIdSpec, cancellationToken);
             model = _mapper.Map<SubCategory>(Dto);
             await _context.SubCategories.UpdateAsync(model, cancellationToken);
@@ -63,10 +63,10 @@ public sealed class SubCategoryService : ISubCategoryService
     public async Task<bool> AnyAsync(CancellationToken cancellationToken = default) =>
         await _context.SubCategories.AnyAsync(cancellationToken: cancellationToken);
 
-    public async Task<bool> AnyAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<bool> AnyByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         ISpecification<SubCategory> asNoTrackingGetSubCategoryByIdSpec = _specificationsFactory
-                        .CreateSubCategorySpecifications(typeof(AsNoTrackingGetSubCategoryByIdSpecification), id);
+                        .CreateSubCategorySpecifications(typeof(AsNoTrackingGetUnDeletedSubCategoryByIdSpecification), id);
 
         return await _context.SubCategories.AnyAsync(asNoTrackingGetSubCategoryByIdSpec, cancellationToken);
     }
@@ -117,7 +117,7 @@ public sealed class SubCategoryService : ISubCategoryService
         try
         {
             ISpecification<SubCategory> asNoTrackingGetSubCategoryByIdSpec = _specificationsFactory
-                                    .CreateSubCategorySpecifications(typeof(AsNoTrackingGetSubCategoryByIdSpecification), id);
+                                    .CreateSubCategorySpecifications(typeof(AsNoTrackingGetUnDeletedSubCategoryByIdSpecification), id);
             return _mapper.Map<GetSubCategoryDto>(await _context.SubCategories.RetrieveAsync(asNoTrackingGetSubCategoryByIdSpec, cancellationToken));
         }
         catch (Exception ex)
