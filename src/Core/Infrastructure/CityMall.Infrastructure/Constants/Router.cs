@@ -73,4 +73,16 @@ public static class Router
         private const string EmailPrefix = ApiPrefix + "emails/";
         public const string SendEmailsToAllUsers = EmailPrefix + "send-emails-to-all-users";
     }
+
+    public static class SubCategories
+    {
+        private const string SubCategoryPrefix = ApiPrefix + "subcategories/";
+        public const string AddSubCategory = SubCategoryPrefix + "add";
+        public const string UpdateSubCategory = SubCategoryPrefix + "update";
+        public const string DeleteSubCategoryById = SubCategoryPrefix + "delete-byid";
+        public const string GetSubCategoryById = SubCategoryPrefix + "get-byid";
+        public const string GetAllSubCategories = SubCategoryPrefix + "get-all";
+        public const string GetAllUnDeletedSubCategories = SubCategoryPrefix + "get-all-undeleted";
+        public const string GetAllDeletedSubCategories = SubCategoryPrefix + "get-all-deleted";
+    }
 }
