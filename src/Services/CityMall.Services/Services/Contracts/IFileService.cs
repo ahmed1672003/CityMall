@@ -22,7 +22,7 @@ public interface IFileService
     public bool EnsureFilesExctensions(IEnumerable<IFormFile> files)
     {
         foreach (var file in files)
-            if (allowedExtension.Contains(Path.GetExtension(file.FileName).ToLower()))
+            if (!allowedExtension.Contains(Path.GetExtension(file.FileName).ToLower()))
                 throw new InvalidImageSizeException("Invalid Image Extension !");
         return true;
     }

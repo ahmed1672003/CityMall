@@ -10,4 +10,5 @@ public interface ISpecificationsFactory
     ISpecification<Category> CreateCategorySpecifications(Type type, params dynamic[] parameters);
     ISpecification<SubCategory> CreateSubCategorySpecifications(Type type, params dynamic[] parameters);
     ISpecification<Product> CreateProductSpecifications(Type type, params dynamic[] parameters);
+    ISpecification<ProductImage> CreateProductImageSpecifications(Type type, params dynamic[] parameters);
 }

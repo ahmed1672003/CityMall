@@ -1,6 +1,9 @@
 ﻿
+using CityMall.Application.Features.ProductImages.Commands;
+using CityMall.Application.Features.ProductImages.Queries;
 using CityMall.Application.Features.Products.Commands;
 using CityMall.Application.Features.Products.Queries;
+using CityMall.Services.Services;
 
 namespace CityMall.API.Controllers;
 
@@ -13,6 +16,10 @@ public class ProductController : CityMallController
     [HttpPost(Router.Products.AddProduct)]
     public async Task<IActionResult> AddProductAsync([FromBody] AddProductCommand cmd) =>
         CityMallResult(await Mediator.Send(cmd));
+
+    [HttpPost(Router.Products.AddProductImages)]
+    public async Task<IActionResult> AddProductImagesAsync([FromForm] AddProductImagesCommand cmd) => CityMallResult(await Mediator.Send(cmd));
+
 
     [HttpPut(Router.Products.UpdateProduct)]
     public async Task<IActionResult> UpdateProductAsync([FromBody] UpdateProductCommand cmd) =>
@@ -38,4 +45,12 @@ public class ProductController : CityMallController
     [HttpGet(Router.Products.GetAllProducts)]
     public async Task<IActionResult> GetAllProductsAsync() =>
         CityMallResult(await Mediator.Send(new GetAllProductsQuery()));
+
+    [HttpGet(Router.Products.GetAllProductImagesByProductId)]
+    public async Task<IActionResult> GetAllProductImagesByProductIdAsync([Required][MaxLength(64)][MinLength(64)][FromQuery] string productId) =>
+        CityMallResult(await Mediator.Send(new GetAllImagesProductByProductIdQuery(productId)));
+
+    [HttpDelete(Router.Products.DeleteProductImageByImageId)]
+    public async Task<IActionResult> DeleteProductImageByImageIdAsync([Required][MaxLength(64)][MinLength(64)][FromQuery] string imageId) =>
+        CityMallResult(await Mediator.Send(new DeleteProductImageByIdCommand(imageId)));
 }

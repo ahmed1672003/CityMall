@@ -90,5 +90,8 @@ public static class Router
         public const string GetAllProducts = ProductPrefix + "get-all";
         public const string GetAllUnDeletedProducts = ProductPrefix + "get-all-undeleted";
         public const string GetAllDeletedProducts = ProductPrefix + "get-all-deleted";
+        public const string AddProductImages = ProductPrefix + "images/add";
+        public const string DeleteProductImageByImageId = ProductPrefix + "images/delete-by-imageid";
+        public const string GetAllProductImagesByProductId = ProductPrefix + "images/get-all-by-productid";
     }
 }

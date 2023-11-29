@@ -1,4 +1,6 @@
-﻿namespace CityMall.Specifications.Specifications;
+﻿using CityMall.Specifications.Specifications.ProductImages;
+
+namespace CityMall.Specifications.Specifications;
 
 public sealed class SpecificationsFactory : ISpecificationsFactory
 {
@@ -119,6 +121,16 @@ public sealed class SpecificationsFactory : ISpecificationsFactory
             "AsNoTrackingCheckDeletedDuplicatedProductBySKUSpecification" => new AsNoTrackingCheckDeletedDuplicatedProductBySKUSpecification(parameters[0], parameters[1]),
             "AsNoTrackingCheckUnDeletedDuplicatedProductBySKUSpecification" => new AsNoTrackingCheckUnDeletedDuplicatedProductBySKUSpecification(parameters[0], parameters[1]),
             "AsNoTrackingCheckDuplicatedProductBySKUSpecification" => new AsNoTrackingCheckDuplicatedProductBySKUSpecification(parameters[0], parameters[1]),
+            _ => throw new InvalidOperationException()
+        };
+    }
+
+    public ISpecification<ProductImage> CreateProductImageSpecifications(Type type, params dynamic[] parameters)
+    {
+        return type.Name switch
+        {
+            "AsNoTrackingGetProductImagesByProductIdSpecification" => new AsNoTrackingGetProductImagesByProductIdSpecification(parameters[0]),
+            "AsNoTrackingGetProductImageByIdSpecification" => new AsNoTrackingGetProductImageByIdSpecification(parameters[0]),
             _ => throw new InvalidOperationException()
         };
     }

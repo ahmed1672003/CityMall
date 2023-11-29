@@ -1,6 +1,6 @@
 ﻿namespace CityMall.Domain.Entities;
 [PrimaryKey(nameof(Id))]
-public sealed class ProductImage : BaseEntity, ICreateableTracker, IDeleteableTracker, IUpdateableTracker
+public sealed class ProductImage : BaseEntity, ICreateableTracker
 {
     [Required]
     [MaxLength(64)]
@@ -29,9 +29,6 @@ public sealed class ProductImage : BaseEntity, ICreateableTracker, IDeleteableTr
     [Required]
     public DateTime CreatedAt { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
-    public bool IsDeleted { get; set; }
-    public DateTime? DeletedAt { get; set; }
 
     [ForeignKey(nameof(ProductId))]
     public Product Product { get; set; }
