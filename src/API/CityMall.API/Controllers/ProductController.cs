@@ -25,9 +25,19 @@ public class ProductController : CityMallController
     public async Task<IActionResult> UpdateProductAsync([FromBody] UpdateProductCommand cmd) =>
         CityMallResult(await Mediator.Send(cmd));
 
+    /// <summary>
+    /// delete product and images
+    /// </summary>
+    /// <param name="productId"></param>
+    /// <returns></returns>
     [HttpPatch(Router.Products.DeleteProductById)]
-    public async Task<IActionResult> DeleteProductByIdAsync([FromQuery][Required][MaxLength(64)][MinLength(64)] string productId) =>
-        CityMallResult(await Mediator.Send(new DeleteProductCommand(productId)));
+    public async Task<IActionResult> DeleteProductByIdAsync([FromQuery][Required][MaxLength(64)][MinLength(64)] string productId)
+    {
+        var deleteProductImagesResult = await Mediator.Send(new DeleteProductImagesByProductIdCommand(productId));
+        if (deleteProductImagesResult.IsSucceeded)
+            return CityMallResult(await Mediator.Send(new DeleteProductCommand(productId)));
+        return CityMallResult(deleteProductImagesResult);
+    }
 
 
     [HttpGet(Router.Products.GetProductById)]

@@ -79,7 +79,6 @@ public sealed class ProductImageService : IProductImageService
             ISpecification<ProductImage> asNoTrackingGetProductImageByIdSpec = _specificationsFactory
                                                         .CreateProductImageSpecifications(typeof(AsNoTrackingGetProductImageByIdSpecification), id);
 
-
             ProductImage model = await _context.ProductImages.RetrieveAsync(asNoTrackingGetProductImageByIdSpec, cancellationToken);
 
             var success = await _fileService.DeleteFileAsync("ProductImages", model.FileName);
@@ -93,11 +92,36 @@ public sealed class ProductImageService : IProductImageService
             throw new ProductImageCommandException($"Error From {nameof(ProductImageService)}.{nameof(DeleteByIdAsync)}");
         }
     }
-
+    public async Task DeleteByProductIdAsync(string productId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            ISpecification<ProductImage> asNoTrackingGetProductImagesByProductIdSpec = _specificationsFactory
+                                        .CreateProductImageSpecifications(typeof(AsNoTrackingGetProductImagesByProductIdSpecification), productId);
+            IQueryable<ProductImage> query = await _context.ProductImages.RetrieveAllAsync(asNoTrackingGetProductImagesByProductIdSpec, cancellationToken);
+            var result = query.Select(pi => new
+            {
+                Id = pi.Id,
+                FileName = pi.FileName
+            });
+            foreach (var img in result)
+            {
+                bool success = await _fileService.DeleteFileAsync("ProductImages", img.FileName);
+                if (!success)
+                    throw new InvalidDeleteImageException($"Error From {nameof(ProductImageService)}.{nameof(DeleteByProductIdAsync)}");
+            }
+            await _context.ProductImages.ExecuteDeleteAsync(asNoTrackingGetProductImagesByProductIdSpec, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            throw new ProductImageCommandException($"Error From {nameof(ProductImageService)}.{nameof(DeleteByProductIdAsync)}");
+        }
+    }
     public async Task<bool> AnyByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         ISpecification<ProductImage> asNoTrackingGetProductImageByIdSpec = _specificationsFactory
                                                        .CreateProductImageSpecifications(typeof(AsNoTrackingGetProductImageByIdSpecification), id);
         return await _context.ProductImages.AnyAsync(asNoTrackingGetProductImageByIdSpec, cancellationToken);
     }
+
 }

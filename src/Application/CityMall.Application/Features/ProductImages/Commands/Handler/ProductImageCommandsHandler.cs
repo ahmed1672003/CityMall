@@ -3,7 +3,8 @@
 namespace CityMall.Application.Features.ProductImages.Commands.Handler;
 public sealed class ProductImageCommandsHandler :
     IRequestHandler<AddProductImagesCommand, ResponseModel<string>>,
-    IRequestHandler<DeleteProductImageByIdCommand, ResponseModel<string>>
+    IRequestHandler<DeleteProductImageByIdCommand, ResponseModel<string>>,
+    IRequestHandler<DeleteProductImagesByProductIdCommand, ResponseModel<string>>
 {
     private readonly IUnitOfServices _services;
 
@@ -35,6 +36,18 @@ public sealed class ProductImageCommandsHandler :
             await _services.ProductImages.DeleteByIdAsync(request.Id, cancellationToken);
 
             return ResponseResult.Success<string>();
+        }
+        catch (Exception ex)
+        {
+            return ResponseResult.InternalServerError<string>(errors: ex.Message);
+        }
+    }
+    public async Task<ResponseModel<string>> Handle(DeleteProductImagesByProductIdCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _services.ProductImages.DeleteByProductIdAsync(request.ProductId, cancellationToken);
+            return ResponseResult.NoContent<string>();
         }
         catch (Exception ex)
         {

@@ -6,6 +6,7 @@ public sealed class ResponseResult
 
     public static ResponseModel<TData> Created<TData>(TData data = null, object errors = null)
         where TData : class => new(statusCode: HttpStatusCode.Created, isSucceeded: true, data: data, errors: errors);
+    public static ResponseModel<TData> NoContent<TData>(object errors = null) => new ResponseModel<TData>(statusCode: HttpStatusCode.NoContent, isSucceeded: true, errors: errors);
 
     public static ResponseModel<TData> NotFound<TData>(TData data = null, object errors = null)
         where TData : class => new(statusCode: HttpStatusCode.NotFound, isSucceeded: true, data: data, errors: errors);

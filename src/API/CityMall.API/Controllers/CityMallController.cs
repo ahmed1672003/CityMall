@@ -2,10 +2,6 @@
 
 using CityMall.Application.Response;
 
-using MediatR;
-
-using Microsoft.AspNetCore.Mvc;
-
 namespace CityMall.API.Controllers;
 /// <summary>
 /// 
@@ -51,8 +47,16 @@ public class CityMallController : ControllerBase
                 return new ConflictObjectResult(response);
 
             case HttpStatusCode.Created:
-                return new CreatedResult("data base", response);
+                return new CreatedResult("server", response);
 
+            case HttpStatusCode.NoContent:
+                return new NoContentResult();
+
+            case HttpStatusCode.Accepted:
+                return new AcceptedResult("server", response);
+
+            case HttpStatusCode.Forbidden:
+                return new ForbidResult("Bearer");
             default:
                 return new ObjectResult(response)
                 {
